@@ -1,0 +1,106 @@
+<?php
+include_once "./admin/config/dbconnect.php";
+
+// Get selected product_id from URL if any
+$product_id = isset($_GET['product_id']) ? (int) $_GET['product_id'] : 0;
+$product = null;
+
+if ($product_id > 0) {
+    $stmt = $conn->prepare("SELECT * FROM collections WHERE id = ?");
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $product = $result->fetch_assoc();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Collections</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; }
+    .grid { display: flex; flex-wrap: wrap; gap: 30px; padding: 40px; justify-content: center; }
+    .product-card { width: 220px; text-align: center; }
+    .product-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 8px; }
+    .product-title { margin-top: 10px; font-weight: bold; font-size: 14px; }
+    .product-price { color: orange; font-size: 16px; }
+
+    .container { max-width: 1000px; margin: auto; display: flex; gap: 40px; padding: 40px; }
+    .left img { width: 100%; max-width: 500px; object-fit: cover; border-radius: 10px; }
+    .right h1 { font-size: 2rem; }
+    .price { font-size: 1.8rem; color: #000; margin: 15px 0; }
+    .btn { padding: 10px 20px; background: #10847e; color: white; border: none; cursor: pointer; }
+    .select { margin: 10px 0; }
+    .back-btn { margin: 20px auto; display: block; background: #555; }
+  </style>
+</head>
+<body>
+
+<?php if ($product): ?>
+  <!-- Product Detail View -->
+  <a href="collections.php" class="btn back-btn">← Back to All Products</a>
+  <div class="container">
+    <div class="left">
+      <?php if (!empty($product['image']) && file_exists("admin/uploads/" . $product['image'])): ?>
+        <img src="admin/uploads/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['product_name']) ?>">
+      <?php else: ?>
+        <div style="width: 400px; height: 400px; background-color: #eee; display: flex; align-items: center; justify-content: center;">
+          No Image Available
+        </div>
+      <?php endif; ?>
+    </div>
+    <div class="right">
+      <h1><?= htmlspecialchars($product['product_name']) ?></h1>
+      <p><strong>Category:</strong> <?= htmlspecialchars($product['category_name'] ?? 'Uncategorized') ?></p>
+      <div class="price">₹<?= number_format($product['price']) ?></div>
+
+      <div class="select">
+        <label for="size">Select Size:</label>
+        <select id="size">
+          <option>Select Size</option>
+          <option>XS</option>
+          <option>S</option>
+          <option>M</option>
+          <option>L</option>
+          <option>XL</option>
+        </select>
+      </div>
+
+      <div class="select">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1" min="1" style="width: 60px;">
+      </div>
+
+      <button class="btn">Add To Cart</button>
+    </div>
+  </div>
+
+<?php else: ?>
+  <!-- All Products View -->
+  <h2 style="text-align:center; margin-top: 20px;">Our Collections</h2>
+  <div class="grid">
+    <?php
+    $sql = "SELECT * FROM collections";
+    $result = $conn->query($sql);
+
+    while ($row = $result->fetch_assoc()):
+    ?>
+      <div class="product-card">
+        <a href="collections.php?product_id=<?= $row['id'] ?>">
+          <?php if (!empty($row['image']) && file_exists("admin/uploads/" . $row['image'])): ?>
+            <img src="admin/uploads/<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['product_name']) ?>">
+          <?php else: ?>
+            <div style="width: 220px; height: 300px; background: #eee; display: flex; align-items: center; justify-content: center;">No Image</div>
+          <?php endif; ?>
+        </a>
+        <div class="product-title"><?= htmlspecialchars($row['product_name']) ?></div>
+        <div class="product-price">₹ <?= htmlspecialchars($row['price']) ?></div>
+      </div>
+    <?php endwhile; ?>
+  </div>
+<?php endif; ?>
+
+</body>
+</html>

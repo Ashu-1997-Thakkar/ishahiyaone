@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Block admin and system files
+Disallow: /shop_admin/
+Disallow: /admin/
+Disallow: /config.php
+Disallow: /db.php
+Disallow: /.htaccess
+Disallow: /velvetvougedb.sql
+Disallow: /PHPMailer/
+Disallow: /fpdf/
+
+# Sitemaps
+Sitemap: https://ishahiyaone.shop/sitemap.xml

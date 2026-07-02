@@ -1,0 +1,1233 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="shop.css" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="header__top">
+      <div class="header__container container">
+        <div class="header__contact">
+          <span>(+91) 9974328904</span>
+          <span>India</span>
+        </div>
+        <p class="header__alert-news">Begin Your Journey to Exceptional Savings</p>
+                  <a href="log.php" class="header__top-action">Login / Sign up</a>
+              </div>
+    </div>
+    <nav class="nav container">
+      <a href="index.html" class="nav__logo">
+        <img src="image/logo/logo.png" alt="" class="nav__logo-img" />
+      </a>
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__list">
+          <li><a href="index.php" class="nav__link">Home</a></li>
+          <li><a href="shop.php" class="nav__link active-link">Shop</a></li>
+          <li><a href="accounts.php" class="nav__link">My Account</a></li>
+          <li><a href="About.php" class="nav__link">About US</a></li>
+        </ul>
+        <div class="header__search">
+          <input type="text" placeholder="Search for items.." class="form__input" />
+          <button class="Search__btn"><img src="image/icon/search.png" alt="" /></button>
+        </div>
+      </div>
+      <div class="header__user-actions">
+        <a href="wishlist.html" class="header__action-btn">
+          <img src="image/icon/icon-heart.svg" alt="" />
+          <span class="count">2</span>
+        </a>
+        <a href="cart.php" class="header__action-btn">
+          <img src="image/icon/icon-cart.svg" alt="" />
+          <span class="count">4</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+<section id="sh-banner">
+  <h4>Welcome to Our Shop</h4>
+  <img src="assets/images/default-banner.gif" alt="GIF Banner"
+       style="width:100%; max-height:400px; object-fit:cover;">
+</section>
+
+
+
+<style>
+.clothing-category { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.clothing-category.visible { display: block; opacity: 1; transform: translateY(0); }
+.category-buttons button { background-color: #e6e6e6; border: none; padding: 8px 15px; margin: 0 3px; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease, transform 0.2s ease; }
+.category-buttons button:hover { background-color: #cccccc; transform: scale(1.05); }
+.category-buttons button.active { background-color: #00897b; color: white; font-weight: bold; }
+</style>
+
+<div class="category-container">
+  <div class="category-buttons">
+    <button id="men-btn">Men</button>
+    <button id="women-btn">Women</button>
+    <button id="kids-btn">Kids</button>
+    <button id="Couple-btn">Couple Combo Collection</button>
+    <button id="festival-upcoming-btn">Upcoming Festival</button>
+    <button id="festival-bumper-btn">Festival Bumper Offers</button>
+  </div>
+
+  <!-- MEN -->
+  <div id="men-clothing" class="clothing-category">
+    <h2>Men's Clothing</h2>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=101'">
+        <img src="/uploads/1754204639_Mens_Exclusive_Lycra_Strachable_Shirt(_IH1581)-1.jpg" alt="Exclusive Lycra Strachable Shirt" />
+        <span>IshaHiya</span>
+        <h4>Exclusive Lycra Strachable Shirt</h4>
+        <p>₹450.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=182'">
+        <img src="/uploads/1755713065_Cotton_Sequence_Work_Kurta_Pyjama(IH8169-Pink_)-1.jpg" alt="Cotton Sequence Work Kurta Pyjama" />
+        <span>IshaHiya</span>
+        <h4>Cotton Sequence Work Kurta Pyjama</h4>
+        <p>₹850.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=92'">
+        <img src="/uploads/1754154215_Couples_Mirror_Work_Kediya_and_Kurta_Combo-1(2000).jpg" alt="Couples Kediya and Kurta Combo" />
+        <span>IshaHiya</span>
+        <h4>Couples Kediya and Kurta Combo</h4>
+        <p>₹2,100.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=110'">
+        <img src="/uploads/1754768502_Couple_Special_Heavy_Muslin_Lehenag_Choli-1(3500).jpg" alt="Couple Special" />
+        <span>IshaHiya</span>
+        <h4>Couple Special</h4>
+        <p>₹3,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=129'">
+        <img src="/uploads/1755032237_Mens_Short_Cotton_Kurta_Collection(IH1992)-1.jpg" alt="Mens Short Cotton Kurta" />
+        <span>IshaHiya</span>
+        <h4>Mens Short Cotton Kurta</h4>
+        <p>₹450.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=130'">
+        <img src="/uploads/1755032562_Printed_Cotton_Kurta_and_Pajama_Set_Perfect_for_Celebrations(IH8013-Maroon)-1.jpg" alt="Printed Cotton Kurta and Pajama Set" />
+        <span>IshaHiya</span>
+        <h4>Printed Cotton Kurta and Pajama Set</h4>
+        <p>₹950.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=131'">
+        <img src="/uploads/1755032985_Multicolor_Cotton_Foil_Print_Kurta_Pajama(IH8013-Blue)-1.jpg" alt="Multicolor Cotton Foil Print Kurta Pajama" />
+        <span>IshaHiya</span>
+        <h4>Multicolor Cotton Foil Print Kurta Pajama</h4>
+        <p>₹950.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=132'">
+        <img src="/uploads/1755033453_mens_wedding_kurta_pajama_(IH7939-Light-Pink)-1.jpg" alt="mens wedding kurta pajama" />
+        <span>IshaHiya</span>
+        <h4>mens wedding kurta pajama</h4>
+        <p>₹1,150.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=195'">
+        <img src="/uploads/1756580669_Teal_Green_Mix_Bandhni_Print_Mens_Kurta(RE8307-Teal-Green)-3.jpg" alt="Mix Bandhni Print Mens Kurta" />
+        <span>IshaHiya</span>
+        <h4>Mix Bandhni Print Mens Kurta</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=247'">
+        <img src="/uploads/1760221844_Mens_Kurta_Collection_updated.png" alt="Men&#039;s Kurta Collection" />
+        <span>IshaHiya</span>
+        <h4>Men&#039;s Kurta Collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=210'">
+        <img src="/uploads/1756843572_WhatsApp_Image_2025-09-01_at_4.31.01_PM_(1).jpeg" alt="RAJWADI RAAS Kurta" />
+        <span>IshaHiya</span>
+        <h4>RAJWADI RAAS Kurta</h4>
+        <p>₹1,300.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=228'">
+        <img src="/uploads/1757106159_Heavy_Cotton_Kurta_Dhoti-1.jpeg" alt="Heavy Cotton Kurta Dhoti" />
+        <span>IshaHiya</span>
+        <h4>Heavy Cotton Kurta Dhoti</h4>
+        <p>₹899.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=233'">
+        <img src="/uploads/1757190087_Cotton_with_Embroidery_&amp;_stylish_pattern_with_pocket-1_(1).jpeg" alt="Cotton with Embroidery &amp; stylish pattern with pocket" />
+        <span>IshaHiya</span>
+        <h4>Cotton with Embroidery &amp; stylish pattern with pocket</h4>
+        <p>₹899.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=257'">
+        <img src="/uploads/1760044902_Man_Kurta_pyjamas,.png" alt="Kurta pyjamas" />
+        <span>IshaHiya</span>
+        <h4>Kurta pyjamas</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=258'">
+        <img src="/uploads/1760044976_Mens_Shirt_Collection.png" alt="men&#039;s shirt collection" />
+        <span>IshaHiya</span>
+        <h4>men&#039;s shirt collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=259'">
+        <img src="/uploads/1760045162_Man_T-Shirt_Collection.png" alt="Men T-Shirt Collection" />
+        <span>IshaHiya</span>
+        <h4>Men T-Shirt Collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=260'">
+        <img src="/uploads/1760047350_T-Shirt_Collection-updated.png" alt="Men T-Shirt Collection" />
+        <span>IshaHiya</span>
+        <h4>Men T-Shirt Collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=261'">
+        <img src="/uploads/1760049721_Men_Jens_Collection_updated.png" alt="Men jeans Collection" />
+        <span>IshaHiya</span>
+        <h4>Men jeans Collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=262'">
+        <img src="/uploads/1760049007_Men_Trousers_Collection.png" alt="Men trouser collection" />
+        <span>IshaHiya</span>
+        <h4>Men trouser collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=263'">
+        <img src="/uploads/1760050069_Men_Crew_Neck_Full_Sleeves_Sweatshirt.png" alt="Men Crew Neck Full Sleeves Sweatshirt" />
+        <span>IshaHiya</span>
+        <h4>Men Crew Neck Full Sleeves Sweatshirt</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=264'">
+        <img src="/uploads/1760051752_Mens_Full_Sleeve_Plain_Hooded_T-shirts.png" alt="Men&#039;s Full Sleeve Plain Hooded T-shirts" />
+        <span>IshaHiya</span>
+        <h4>Men&#039;s Full Sleeve Plain Hooded T-shirts</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=265'">
+        <img src="/uploads/1760052392_Men_Half_Sleeves_T-shirts.png" alt="Men Half Sleeves T-shirts Collection" />
+        <span>IshaHiya</span>
+        <h4>Men Half Sleeves T-shirts Collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=267'">
+        <img src="/uploads/1760054587_Men_Cargo_Pants_Collection.png" alt="Men Cargo Pants Collection" />
+        <span>IshaHiya</span>
+        <h4>Men Cargo Pants Collection</h4>
+        <p>₹999.00</p>
+      </div>
+      </div>
+
+  <!-- WOMEN -->
+  <div id="women-clothing" class="clothing-category">
+    <h2>Women's Clothing</h2>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=193'">
+        <img src="/uploads/1756577991_Hevay_Muslin_Cotton_With_Embrodery_&amp;_Mirror_Work-(RE1169)-1.jpg" alt="Hevay Muslin Cotton With Embrodery &amp; Mirror Work" />
+        <span>IshaHiya</span>
+        <h4>Hevay Muslin Cotton With Embrodery &amp; Mirror Work</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=96'">
+        <img src="/uploads/1754168852_Elegant_Rama_Green_Silk_Gown_with_Sequin_Work_Dupatta(IH7639-Rama-Green)-1.jpg" alt="Gown" />
+        <span>IshaHiya</span>
+        <h4>Gown</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=201'">
+        <img src="/uploads/1756837768_WhatsApp_Image_2025-09-02_at_6.16.02_PM.jpeg" alt="Navratri Special Pure Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Navratri Special Pure Cotton Lehenga Choli</h4>
+        <p>₹2,250.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=202'">
+        <img src="/uploads/1756838536_WhatsApp_Image_2025-09-02_at_6.15.06_PM_(1).jpeg" alt="Launching For Navratri Kediyu Lehenga" />
+        <span>IshaHiya</span>
+        <h4>Launching For Navratri Kediyu Lehenga</h4>
+        <p>₹2,250.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=245'">
+        <img src="/uploads/1760214853_Georgette_Kurtis_Collection.png" alt="Georgette Kurti Collection" />
+        <span>IshaHiya</span>
+        <h4>Georgette Kurti Collection</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=246'">
+        <img src="/uploads/1760216620_Bridal_Lehenga_Choli_Collection.png" alt="Bridal Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Bridal Lehenga Choli</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=109'">
+        <img src="/uploads/1754343338_Embroidered_Straight_Kurta_Set-1(699).jpg" alt="Kurti Palazzo" />
+        <span>IshaHiya</span>
+        <h4>Kurti Palazzo</h4>
+        <p>₹490.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=112'">
+        <img src="/uploads/1754947426_Multi-Color_Cotton_Gamthi_Work_Navratri_Wear_Lehenga_Choli-2.jpg" alt="Gamthi Work Navratri Lehenga Choli Multi Color" />
+        <span>IshaHiya</span>
+        <h4>Gamthi Work Navratri Lehenga Choli Multi Color</h4>
+        <p>₹2,250.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=113'">
+        <img src="/uploads/1755024260_Muslin_Mirror_Work_Lehenga_Choli-1(1599).jpg" alt="Muslin Mirror Work Lehenga Choli with Digital Prints" />
+        <span>IshaHiya</span>
+        <h4>Muslin Mirror Work Lehenga Choli with Digital Prints</h4>
+        <p>₹2,100.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=115'">
+        <img src="/uploads/1755026133_Muslin_Mirror_Work_Lehenga_Choli_With_Embroidered_Blouse-1(1449).jpg" alt="Muslin Mirror Work Lehenga Choli With Embroidered Blouse" />
+        <span>IshaHiya</span>
+        <h4>Muslin Mirror Work Lehenga Choli With Embroidered Blouse</h4>
+        <p>₹1,800.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=116'">
+        <img src="/uploads/1755026317_Cotton_Printed_Lehenga_Choli_-1(3000).jpg" alt="Cotton Printed Lehenga Choli with Gota Kodi Work" />
+        <span>IshaHiya</span>
+        <h4>Cotton Printed Lehenga Choli with Gota Kodi Work</h4>
+        <p>₹3,250.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=117'">
+        <img src="/uploads/1755026501_Navratri_Special_Rayon_Chaniya_Choli-1(949).jpg" alt="Rayon Chaniya Choli with Latkan Dupatta" />
+        <span>IshaHiya</span>
+        <h4>Rayon Chaniya Choli with Latkan Dupatta</h4>
+        <p>₹1,250.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=183'">
+        <img src="/uploads/1755730446_Kedia_And_Tulip_Pants_(RE4805_)-1.jpg" alt="Heavy Embroiderd Kedia And Tulip Pants" />
+        <span>IshaHiya</span>
+        <h4>Heavy Embroiderd Kedia And Tulip Pants</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=120'">
+        <img src="/uploads/1755027794_Cotton_Lehenga_Choli_with_Flared_Ghera_and_Mirror_Blouse(IH8030-Maroon).jpg" alt="Cotton Lehenga Choli with Flared" />
+        <span>IshaHiya</span>
+        <h4>Cotton Lehenga Choli with Flared</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=133'">
+        <img src="/uploads/1755034713_Marvelous_Festival_Fox_Georgette_Lehenga_Choli_(IH5663)-1.jpg" alt="Fox Georgette Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Fox Georgette Lehenga Choli</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=134'">
+        <img src="/uploads/1755034820_Marvelous_Festival_Fox_Georgette_Lehenga_Choli_(IH5663)-6.jpg" alt="Fox Georgette Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Fox Georgette Lehenga Choli</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=135'">
+        <img src="/uploads/1755035505_Premium_Faux_Georgette_Designer_Lehenga_Choli_(IH6695)-1.jpg" alt="Premium Faux Georgette Designer Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Premium Faux Georgette Designer Lehenga Choli</h4>
+        <p>₹2,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=248'">
+        <img src="/uploads/1760213771_Designer_Wedding_Sarees.png" alt="Designer Wedding Sarees" />
+        <span>IshaHiya</span>
+        <h4>Designer Wedding Sarees</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=138'">
+        <img src="/uploads/1755037615_Elegant_Light_Green_Floral_Viscose_Readymade_Kurti(IH8176-Light-Green)-1.jpg" alt="Elegant Light Green Floral Viscose Readymade Kurti" />
+        <span>IshaHiya</span>
+        <h4>Elegant Light Green Floral Viscose Readymade Kurti</h4>
+        <p>₹989.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=139'">
+        <img src="/uploads/1755037848_Pink_Viscose_Twill_Floral_Print_Spaghetti_Kurti(IH8176-Pink)-1.jpg" alt="Pink Viscose Twill Floral Print Spaghetti Kurti" />
+        <span>IshaHiya</span>
+        <h4>Pink Viscose Twill Floral Print Spaghetti Kurti</h4>
+        <p>₹989.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=143'">
+        <img src="/uploads/1755189777_Traditional_Rani_Pink_Gamthi_Cotton_Lehenga_Choli(IH7880)-1.jpg" alt="Rani Pink Gamthi Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Rani Pink Gamthi Cotton Lehenga Choli</h4>
+        <p>₹2,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=194'">
+        <img src="/uploads/1756579178_Muslin_Cotton_Printed_Lehenga_Choli(RE1309)-4.jpg" alt="Muslin Cotton Printed Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Muslin Cotton Printed Lehenga Choli</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=145'">
+        <img src="/uploads/1755199454_Multicolor_Muslin_Lehenga_Choli_with_Mirror_Work(IH7869)-1.jpg" alt="Multicolor Muslin Lehenga Choli with Mirror Work" />
+        <span>IshaHiya</span>
+        <h4>Multicolor Muslin Lehenga Choli with Mirror Work</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=147'">
+        <img src="/uploads/1755201213_Stylish_Black_Butter_Silk_Lehenga_Choli_with_Real_Mirror_Work(IH7877)-1.jpg" alt="Butter Silk Lehenga Choli with Real Mirror Work" />
+        <span>IshaHiya</span>
+        <h4>Butter Silk Lehenga Choli with Real Mirror Work</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=148'">
+        <img src="/uploads/1755201911_9_Raas_Special_Rayon_Lehenga_Choli_(IH7833)-1.jpg" alt="Raas Special Rayon Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Raas Special Rayon Lehenga Choli</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=149'">
+        <img src="/uploads/1755202985_Mirror_Magic_Gamthi_Lehenga_Choli_(IH7536)-1.jpg" alt="Mirror Magic Gamthi Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Mirror Magic Gamthi Lehenga Choli</h4>
+        <p>₹2,150.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=150'">
+        <img src="/uploads/1755256221_Rayon_Mirror_Gamthi_Lehenga_Choli_with_Jacket(IH8210-White)-1.jpg" alt="Rayon Mirror Gamthi Lehenga Choli with Jacket" />
+        <span>IshaHiya</span>
+        <h4>Rayon Mirror Gamthi Lehenga Choli with Jacket</h4>
+        <p>₹2,599.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=151'">
+        <img src="/uploads/1755256179_Mustard_Rayon_Gamthi_Mirror_Lehenga_with_Jacket(IH8210-Mustard-Yellow)-1.jpg" alt="Mustard Rayon Gamthi Mirror Lehenga with Jacket" />
+        <span>IshaHiya</span>
+        <h4>Mustard Rayon Gamthi Mirror Lehenga with Jacket</h4>
+        <p>₹2,599.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=152'">
+        <img src="/uploads/1755256809_Pink_Rayon_Mirror_Gamthi_Lehenga_Choli_with_Koti(IH8210-Pink)-1.jpg" alt="Pink Rayon Mirror Gamthi Lehenga Choli with Koti" />
+        <span>IshaHiya</span>
+        <h4>Pink Rayon Mirror Gamthi Lehenga Choli with Koti</h4>
+        <p>₹2,599.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=153'">
+        <img src="/uploads/1755257268_Black_Rayon_Gamthi_Jacket_Lehenga_Choli(IH8210-Black)-3.jpg" alt="Black Rayon Gamthi Jacket Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Black Rayon Gamthi Jacket Lehenga Choli</h4>
+        <p>₹2,599.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=154'">
+        <img src="/uploads/1755258300_Traditional_Garba_Lehenga_Choli_in_Multi_Colors_Raas(IH7879)-1.jpg" alt="Multi Colors Raas Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Multi Colors Raas Lehenga Choli</h4>
+        <p>₹4,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=156'">
+        <img src="/uploads/1755258758_Traditional_Garba_Lehenga_Choli_in_Multi_Colors_Raas(RE7879)-4.jpg" alt="Multi Colors Raas Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Multi Colors Raas Lehenga Choli</h4>
+        <p>₹4,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=157'">
+        <img src="/uploads/1755267901_Traditional_Garba_Lehenga_Choli_in_Multi_Colors_Raas(RE7879)-3.jpg" alt="Multi Colors Raas Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Multi Colors Raas Lehenga Choli</h4>
+        <p>₹4,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=158'">
+        <img src="/uploads/1755269441_Navratri_Special_Geeta_Rabari_Style_Muslin_Cotton_Chaniya_Choli(IH6989-2.jpg" alt="Muslin Cotton Chaniya Choli" />
+        <span>IshaHiya</span>
+        <h4>Muslin Cotton Chaniya Choli</h4>
+        <p>₹1,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=159'">
+        <img src="/uploads/1755270194_Charcoal_Grey_Cotton_Silk_Lehenga_Choli_(IH836)-1.jpg" alt="Charcoal Grey Cotton Silk Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Charcoal Grey Cotton Silk Lehenga Choli</h4>
+        <p>₹2,799.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=160'">
+        <img src="/uploads/1755271012_Black_Vichitra_Silk_Suit_with_Jacquard_Lace_and_Dupatta(IH8191-Black)-1.jpg" alt="Black Vichitra Silk Suit with Jacquard Lace and Dupatta" />
+        <span>IshaHiya</span>
+        <h4>Black Vichitra Silk Suit with Jacquard Lace and Dupatta</h4>
+        <p>₹1,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=162'">
+        <img src="/uploads/1755272022_Purple_Vichitra_Silk_Embroidered_Kurti_Set(IH8191-Purple)-1.jpg" alt="Purple Vichitra Silk Embroidered Kurti Set" />
+        <span>IshaHiya</span>
+        <h4>Purple Vichitra Silk Embroidered Kurti Set</h4>
+        <p>₹1,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=163'">
+        <img src="/uploads/1755272410_agenta_Vichitra_Silk_Suit_with_Golden_Jacquard_Lace(IH8191-Magenta-1.jpg" alt="Magenta Vichitra Silk Suit with Golden Jacquard Lace" />
+        <span>IshaHiya</span>
+        <h4>Magenta Vichitra Silk Suit with Golden Jacquard Lace</h4>
+        <p>₹1,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=164'">
+        <img src="/uploads/1755272739_Bottle_Green_Vichitra_Silk_Suit_(IH8191-Bottle-Green)-2.jpg" alt="Bottle Green Vichitra Silk Suit with Jacquard Border Dupatta" />
+        <span>IshaHiya</span>
+        <h4>Bottle Green Vichitra Silk Suit with Jacquard Border Dupatta</h4>
+        <p>₹1,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=165'">
+        <img src="/uploads/1755281461_Summer_Ethnic_Wear_in_Blue_Pink_Kurti_Palazzo_Set-1(IH6837-Pink).jpg" alt="Kurti Palazzo Set" />
+        <span>IshaHiya</span>
+        <h4>Kurti Palazzo Set</h4>
+        <p>₹550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=166'">
+        <img src="/uploads/1755282140_Stitched_Kurta_Palazzo_Combo_Sleeveless_Kurti_for_Women-1(IH6837-Blue).jpg" alt="Kurti Palazzo Set" />
+        <span>IshaHiya</span>
+        <h4>Kurti Palazzo Set</h4>
+        <p>₹550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=167'">
+        <img src="/uploads/1755286046_Mrunal_Thakur_Style_Floral_Koti_Sharara_(IH8015)-2.jpg" alt="Floral Koti Sharara" />
+        <span>IshaHiya</span>
+        <h4>Floral Koti Sharara</h4>
+        <p>₹1,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=168'">
+        <img src="/uploads/1755290464_Pure_Aura_Cotton_Silk_Saree_Contrast_Blouse(IH7610)-5.jpg" alt="Pure Aura Cotton Silk Saree Contrast Blouse" />
+        <span>IshaHiya</span>
+        <h4>Pure Aura Cotton Silk Saree Contrast Blouse</h4>
+        <p>₹800.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=186'">
+        <img src="/uploads/1755812738_Lavender_Linen_Cotton_Saree_with_Lotus_and_Cow_Print(IH8243)-1.jpg" alt="Lavender Linen Cotton Saree with Lotus and Cow Print" />
+        <span>IshaHiya</span>
+        <h4>Lavender Linen Cotton Saree with Lotus and Cow Print</h4>
+        <p>₹1,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=189'">
+        <img src="/uploads/1756312137_Bandhej_Khadi_Cotton_Lehenga_Choli_with_Mirror_Embroidery(RE8289)-3.jpg" alt="Bandhej Khadi Cotton Lehenga with Gamthi Work Choli" />
+        <span>IshaHiya</span>
+        <h4>Bandhej Khadi Cotton Lehenga with Gamthi Work Choli</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=190'">
+        <img src="/uploads/1756313326_Pink_Roman_Silk_Lehenga_with_Mirror_Work_and_Gota_Lace(RE8287-Pink)-1.jpg" alt="Roman Silk Lehenga with Mirror Work and Gota Lace" />
+        <span>IshaHiya</span>
+        <h4>Roman Silk Lehenga with Mirror Work and Gota Lace</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=191'">
+        <img src="/uploads/1756574157_Heavy_MUSLIN_COTTON_digital_print_.jpg" alt="Multicolor Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Multicolor Muslin Cotton Lehenga Choli</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=192'">
+        <img src="/uploads/1756575762_Heavy_Muslin_Cotton_Lehenga_Choli-1.jpg" alt="Heavy Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Lehenga Choli</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=197'">
+        <img src="/uploads/1756588157_Gota_patti_WORK_&amp;_LAMPI_LACE_WORK_.jpg" alt="NAVRATRI  SPECIAL CHANIYA CHOLI" />
+        <span>IshaHiya</span>
+        <h4>NAVRATRI  SPECIAL CHANIYA CHOLI</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=198'">
+        <img src="/uploads/1756589796_INDOWESTERN_LEHENGA_SET_WITH_GAMTHI_WORK-1.jpg" alt="NAVRATRI  SPECIAL INDOWESTERN LEHENGA SET WITH GAMTHI WORK" />
+        <span>IshaHiya</span>
+        <h4>NAVRATRI  SPECIAL INDOWESTERN LEHENGA SET WITH GAMTHI WORK</h4>
+        <p>₹2,100.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=199'">
+        <img src="/uploads/1756590749_Navratri_Special_Heavy_Muslin_Cotton_Lehenga_Choli(RE4259)-1.jpg" alt="Heavy Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Lehenga Choli</h4>
+        <p>₹2,100.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=200'">
+        <img src="/uploads/1756592016_SPECIAL_CHANIYA_CHOLI_IN_6-MTR_FLAIR-1.jpg" alt="Heavy Muslin Cotton Printed Lehenga Choli  IN 6-MTR  FLAIR" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Printed Lehenga Choli  IN 6-MTR  FLAIR</h4>
+        <p>₹2,100.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=203'">
+        <img src="/uploads/1756839014_WhatsApp_Image_2025-09-02_at_6.14.40_PM_(1).jpeg" alt="Pure Cotton Lehenga Choli with 6 Meter Big Flair" />
+        <span>IshaHiya</span>
+        <h4>Pure Cotton Lehenga Choli with 6 Meter Big Flair</h4>
+        <p>₹2,250.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=205'">
+        <img src="/uploads/1756840945_WhatsApp_Image_2025-09-02_at_6.03.22_PM.jpeg" alt="Navratri Special Havy Rayon Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Navratri Special Havy Rayon Lehenga Choli</h4>
+        <p>₹2,300.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=206'">
+        <img src="/uploads/1756841931_WhatsApp_Image_2025-09-02_at_6.03.08_PM.jpeg" alt="New Launch Navratri Special Havy Rayon Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>New Launch Navratri Special Havy Rayon Lehenga Choli</h4>
+        <p>₹2,300.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=207'">
+        <img src="/uploads/1756842423_WhatsApp_Image_2025-09-01_at_6.54.48_PM_(1).jpeg" alt="Pure Khadi Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Pure Khadi Cotton Lehenga Choli</h4>
+        <p>₹2,500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=211'">
+        <img src="/uploads/1756844214_WhatsApp_Image_2025-09-01_at_3.41.11_PM_(1).jpeg" alt="GOTA PATTI WORKS FULL FLAIR Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>GOTA PATTI WORKS FULL FLAIR Lehenga Choli</h4>
+        <p>₹1,850.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=212'">
+        <img src="/uploads/1756845492_WhatsApp_Image_2025-09-02_at_3.59.40_PM.jpeg" alt="REYON WITH PRINT FULLSTITCHED Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>REYON WITH PRINT FULLSTITCHED Lehenga Choli</h4>
+        <p>₹1,700.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=213'">
+        <img src="/uploads/1756846516_WhatsApp_Image_2025-09-02_at_3.51.44_PM.jpeg" alt="Chinon Silk Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Chinon Silk Lehenga Choli</h4>
+        <p>₹1,950.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=215'">
+        <img src="/uploads/1757009576_Pure_Aura_Cotton_Silk_Saree_Contrast_Blouse_&amp;_Pallu(IH7610)-1.jpg" alt="Pure Aura Cotton Silk Saree Contrast Blouse &amp; Pallu" />
+        <span>IshaHiya</span>
+        <h4>Pure Aura Cotton Silk Saree Contrast Blouse &amp; Pallu</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=216'">
+        <img src="/uploads/1757011240_Banarasi_Style_Lichi_Saree_with_Rich_Contrast_Blouse(RE7900-Teal)-1.jpg" alt="Banarasi Style Lichi Saree with Rich Contrast Blouse" />
+        <span>IshaHiya</span>
+        <h4>Banarasi Style Lichi Saree with Rich Contrast Blouse</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=217'">
+        <img src="/uploads/1758601218_Navratri_Special_Rayon_Chaniya_Choli-1(949).jpg" alt="Woven Designer Silk Saree in Teal Green" />
+        <span>IshaHiya</span>
+        <h4>Woven Designer Silk Saree in Teal Green</h4>
+        <p>₹934.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=218'">
+        <img src="/uploads/1757012130_Pure_Aura_Cotton_Silk_Saree_Contrast_Blouse_&amp;_Pallu(IH7610)-5.jpg" alt="Pure Aura Cotton Silk Saree Contrast Blouse" />
+        <span>IshaHiya</span>
+        <h4>Pure Aura Cotton Silk Saree Contrast Blouse</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=219'">
+        <img src="/uploads/1757013248_Sea_Blue_Cotton_Silk_Saree_with_Elegant_Paithani_Concept(IH8158-Blue)-1.jpg" alt="Sea Blue Cotton Silk Saree with Elegant Paithani Concept" />
+        <span>IshaHiya</span>
+        <h4>Sea Blue Cotton Silk Saree with Elegant Paithani Concept</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=221'">
+        <img src="/uploads/1757015653_WhatsApp_Image_2025-09-05_at_1.09.22_AM.jpeg" alt="Pure banarasi Silk Sarees" />
+        <span>IshaHiya</span>
+        <h4>Pure banarasi Silk Sarees</h4>
+        <p>₹730.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=222'">
+        <img src="/uploads/1757021187_WhatsApp_Image_2025-09-05_at_1.11.34_AM.jpeg" alt="HEAVY RICH COTTON SILK DIGITALPRINT" />
+        <span>IshaHiya</span>
+        <h4>HEAVY RICH COTTON SILK DIGITALPRINT</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=223'">
+        <img src="/uploads/1757021480_WhatsApp_Image_2025-09-05_at_1.12.42_AM.jpeg" alt="HEAVY RICH COTTON SILK DIGITALPRINT &amp; JEQUARED" />
+        <span>IshaHiya</span>
+        <h4>HEAVY RICH COTTON SILK DIGITALPRINT &amp; JEQUARED</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=224'">
+        <img src="/uploads/1757023645_WhatsApp_Image_2025-09-05_at_3.22.44_AM.jpeg" alt="Original Japan Satin (Devsena satin)" />
+        <span>IshaHiya</span>
+        <h4>Original Japan Satin (Devsena satin)</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=225'">
+        <img src="/uploads/1758651380_WhatsApp_Image_-4.jpeg" alt="Original Japan Satin (Devsena satin)" />
+        <span>IshaHiya</span>
+        <h4>Original Japan Satin (Devsena satin)</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=226'">
+        <img src="/uploads/1757024271_WhatsApp_Image_2025-09-05_at_3.27.23_AM.jpeg" alt="Original Japan Satin (Devsena satin)" />
+        <span>IshaHiya</span>
+        <h4>Original Japan Satin (Devsena satin)</h4>
+        <p>₹930.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=252'">
+        <img src="/uploads/1760211290_Printed_Kurtis_Collection.png" alt="Printed Kurtis Collection" />
+        <span>IshaHiya</span>
+        <h4>Printed Kurtis Collection</h4>
+        <p>₹450.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=253'">
+        <img src="/uploads/1760212574_Embroidery_Kurtis_Collection.png" alt="Embroidery Kurtis" />
+        <span>IshaHiya</span>
+        <h4>Embroidery Kurtis</h4>
+        <p>₹500.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=229'">
+        <img src="/uploads/1757107283_WhatsApp_Image_2025-09-05_at_11.39.50_PM.jpeg" alt="Heavy Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Lehenga Choli</h4>
+        <p>₹1,999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=244'">
+        <img src="/uploads/1760217675_Designer_Lehenga_Choli_Collection.png" alt="Designer Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Designer Lehenga Choli</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=231'">
+        <img src="/uploads/1757108785_WhatsApp_Image_2025-09-05_at_11.32.11_PM.jpeg" alt="Heavy Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Lehenga Choli</h4>
+        <p>₹1,899.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=232'">
+        <img src="/uploads/1757109905_WhatsApp_Image_2025-09-05_at_11.25.38_PM.jpeg" alt="Heavy Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Lehenga Choli</h4>
+        <p>₹1,899.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=235'">
+        <img src="/uploads/1757274587_Heavy_MUSLIN_COTTON_CHANIYA_CHOLI-1_(4).jpeg" alt="Heavy Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Lehenga Choli</h4>
+        <p>₹1,950.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=236'">
+        <img src="/uploads/1757276044_WhatsApp_Image_2025-09-08_at_1.39.04_AM.jpeg" alt="Heavy Muslin Cotton Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Heavy Muslin Cotton Lehenga Choli</h4>
+        <p>₹1,950.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=237'">
+        <img src="/uploads/1757281227_Havy_Rayon_Gamthi_Thred_Work_With_Real_Mirror_Lehenga_Choli-1.jpeg" alt="Havy Rayon Gamthi Thred Work With Real Mirror Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Havy Rayon Gamthi Thred Work With Real Mirror Lehenga Choli</h4>
+        <p>₹2,050.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=238'">
+        <img src="/uploads/1757615950_WhatsApp_Image_2025-09-02_at_3.59.40_PM.jpeg" alt="Navratri Lehnega Choli" />
+        <span>IshaHiya</span>
+        <h4>Navratri Lehnega Choli</h4>
+        <p>₹1,700.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=239'">
+        <img src="/uploads/1760218470_NAVRATRI_CHANIYA_CHOLI_Collection.png" alt="NAVRATRI CHANIYA CHOLI COLLECTION" />
+        <span>IshaHiya</span>
+        <h4>NAVRATRI CHANIYA CHOLI COLLECTION</h4>
+        <p>₹1,700.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=249'">
+        <img src="/uploads/1760220915_Silk_Sarees_Collection.png" alt="Silk Sarees" />
+        <span>IshaHiya</span>
+        <h4>Silk Sarees</h4>
+        <p>₹799.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=250'">
+        <img src="/uploads/1760220400_Printed_Cotton_Sarees_Collection_new.png" alt="Printed Cotton Sarees Collection" />
+        <span>IshaHiya</span>
+        <h4>Printed Cotton Sarees Collection</h4>
+        <p>₹999.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=251'">
+        <img src="/uploads/1758145266_Embroidered_Traditional_Saree-1.jpg" alt="Embroidery Sarees" />
+        <span>IshaHiya</span>
+        <h4>Embroidery Sarees</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=254'">
+        <img src="/uploads/1760209433_Anarkali_Kurtis_Collection.png" alt="Anarkali Kurtis Collection" />
+        <span>IshaHiya</span>
+        <h4>Anarkali Kurtis Collection</h4>
+        <p>₹1,500.00</p>
+      </div>
+      </div>
+
+  <!-- KIDS -->
+  <div id="kids-clothing" class="clothing-category">
+    <h2>Kids' Clothing</h2>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=105'">
+        <img src="/uploads/1754241548_Kanhaiya_Dhoti_Kurta_with_Mukut_Bansuri_Belt_Yellow_-1-1.jpg" alt="Kanhaiya Dhoti Kurta with Mukut Bansuri" />
+        <span>IshaHiya</span>
+        <h4>Kanhaiya Dhoti Kurta with Mukut Bansuri</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=106'">
+        <img src="/uploads/1754243126_Traditional_Navratri_Special_Cotton_Embroidered_Dress_For_Boys(IH2082)-4.jpg" alt="Navratri Special Cotton Embroidered Dress For Boys" />
+        <span>IshaHiya</span>
+        <h4>Navratri Special Cotton Embroidered Dress For Boys</h4>
+        <p>₹1,200.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=94'">
+        <img src="/uploads/1754155266_festivals_special_Cotton_fabric_kids_kurta_with_payjama_(IH5448_)-1.jpg" alt="kids kurta with payjama" />
+        <span>IshaHiya</span>
+        <h4>kids kurta with payjama</h4>
+        <p>₹700.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=121'">
+        <img src="/uploads/1755029144_Black_Roman_Silk_Kids_Navratri_-1.jpg" alt="Black Roman Silk Kids Navratri Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Black Roman Silk Kids Navratri Lehenga Choli</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=122'">
+        <img src="/uploads/1755029100_Roman_Silk_Kids_Lehenga_Choli(IH8178)-1.jpg" alt="Roman Silk Kids Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Roman Silk Kids Lehenga Choli</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=123'">
+        <img src="/uploads/1755029534_Red_Roman_Silk_Kids_Lehenga_Choli_(RE8178)-1.jpg" alt="Red Roman Silk Kids Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Red Roman Silk Kids Lehenga Choli</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=124'">
+        <img src="/uploads/1755029877_Multi_Color_Roman_Silk_Kids_Lehenga_Choli_(IH8178)-1.jpg" alt="Multi Color Roman Silk Kids Navratri Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Multi Color Roman Silk Kids Navratri Lehenga Choli</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=125'">
+        <img src="/uploads/1755203926_Pink_Roman_Silk_Kids_Lehenga_Choli_with_Gota_Patti(IH8178-Pink)-1.jpg" alt="Pink Roman Silk Kids Lehenga Choli with Gota Patti" />
+        <span>IshaHiya</span>
+        <h4>Pink Roman Silk Kids Lehenga Choli with Gota Patti</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=126'">
+        <img src="/uploads/1755030535_Yellow_Designer_Roman_Silk_Kids_Navratri_Lehenga_Choli_(IH8178-Yellow)-1.jpg" alt="Yellow Designer Roman Silk Kids Navratri Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Yellow Designer Roman Silk Kids Navratri Lehenga Choli</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=127'">
+        <img src="/uploads/1755195426_Maroon_Premium_Roman_Silk_Kids_Garba_Lehenga_Choli(_IH8178-Maroon)-1.jpg" alt="Maroon Premium Roman Silk Kids Garba Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Maroon Premium Roman Silk Kids Garba Lehenga Choli</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=128'">
+        <img src="/uploads/1755031251_Purple_Color_Heavy_Roman_Silk_Kids_Navratri_Lehenga_Choli_(IH8178-Purple)-1.jpg" alt="Purple Color Heavy Roman Silk Kids Navratri Lehenga Choli" />
+        <span>IshaHiya</span>
+        <h4>Purple Color Heavy Roman Silk Kids Navratri Lehenga Choli</h4>
+        <p>₹1,350.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=214'">
+        <img src="/uploads/1756883116_Boy_Regular_Fit_Leaf_Print_Shirt.avif" alt="Shirt" />
+        <span>IshaHiya</span>
+        <h4>Shirt</h4>
+        <p>₹1.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=255'">
+        <img src="/uploads/1758545600_Boy_Regular_Fit_Leaf_Print_Shirt.avif" alt="kids-tshirts" />
+        <span>IshaHiya</span>
+        <h4>kids-tshirts</h4>
+        <p>₹500.00</p>
+      </div>
+      </div>
+
+  <!-- COUPLE -->
+  <div id="couple-combo" class="clothing-category">
+    <h2>Couple Combo Collection</h2>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=169'">
+        <img src="/uploads/1755448171_Mauve_Soft_Georgette_Embroidered_Wedding_Wear_Couple_Wear_Set-5.jpg" alt="Couple Combo Embroidered Lehenga Choli and Mens Kurta Set" />
+        <span>IshaHiya</span>
+        <h4>Couple Combo Embroidered Lehenga Choli and Mens Kurta Set</h4>
+        <p>₹5,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=170'">
+        <img src="/uploads/1755448595_Mauve_Soft_Georgette_Embroidered_Wedding_Wear_Couple_Wear_Set-4.jpg" alt="Haldi Ceremony Couple Dress Georgette Lehenga with Kurta Pajama" />
+        <span>IshaHiya</span>
+        <h4>Haldi Ceremony Couple Dress Georgette Lehenga with Kurta Pajama</h4>
+        <p>₹5,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=171'">
+        <img src="/uploads/1755449353_Mauve_Soft_Georgette_Embroidered_Wedding_Wear_Couple_Wear_Set-1(6500).jpg" alt="Mauve Soft Georgette Embroidered Wedding Wear Couple Wear" />
+        <span>IshaHiya</span>
+        <h4>Mauve Soft Georgette Embroidered Wedding Wear Couple Wear</h4>
+        <p>₹5,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=172'">
+        <img src="/uploads/1755449928_Mauve_Soft_Georgette_Embroidered_Wedding_Wear_Couple_Wear_Set-6.jpg" alt="Georgette Silk Perfect for Wedding Special Couple Combo" />
+        <span>IshaHiya</span>
+        <h4>Georgette Silk Perfect for Wedding Special Couple Combo</h4>
+        <p>₹5,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=174'">
+        <img src="/uploads/1755451943_Couple_Matching_Jacquard_Silk_Saree_for_Women_Koti_Kurta_Pajama_for_Men.jpg" alt="Couple Wear Kurta Pajama with Koti for Men and Matching Saree" />
+        <span>IshaHiya</span>
+        <h4>Couple Wear Kurta Pajama with Koti for Men and Matching Saree</h4>
+        <p>₹2,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=175'">
+        <img src="/uploads/1755453161_Yellow_Haldi_Couple_Outfit_Set-1(2500).jpg" alt="Yellow Haldi Couple Outfit Set Traditional Indian Saree with Mens Kurta Pajama Jacquard Silk Jacket" />
+        <span>IshaHiya</span>
+        <h4>Yellow Haldi Couple Outfit Set Traditional Indian Saree with Mens Kurta Pajama Jacquard Silk Jacket</h4>
+        <p>₹2,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=179'">
+        <img src="/uploads/1755454042_Cotton_Kurta_with_Jacquard_Silk_Koti_Womens_Jacquard_Silk_Saree_-7.jpg" alt="Elegant Indian Blue Couple Combo Kurta Pajama with Silk Koti for Men" />
+        <span>IshaHiya</span>
+        <h4>Elegant Indian Blue Couple Combo Kurta Pajama with Silk Koti for Men</h4>
+        <p>₹2,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=177'">
+        <img src="/uploads/1755453540_Cotton_Kurta_with_Jacquard_Silk_Koti_Womens_Jacquard_Silk_Saree_.jpg" alt="Orange Couple Combo Set Mens Cotton Kurta with Jacquard Silk Koti Womens Jacquard Silk Saree" />
+        <span>IshaHiya</span>
+        <h4>Orange Couple Combo Set Mens Cotton Kurta with Jacquard Silk Koti Womens Jacquard Silk Saree</h4>
+        <p>₹2,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=178'">
+        <img src="/uploads/1755453709_Cotton_Kurta_with_Jacquard_Silk_Koti_Womens_Jacquard_Silk_Saree_-4.jpg" alt="Couple Combo of Mens Kurta Pajama with Koti and Womens Jacquard Silk Saree" />
+        <span>IshaHiya</span>
+        <h4>Couple Combo of Mens Kurta Pajama with Koti and Womens Jacquard Silk Saree</h4>
+        <p>₹2,550.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=181'">
+        <img src="/uploads/1755637382_Patola_Foil_Print_Lehenga_with_Kurta_Pajama(IH8218-4)-1.jpg" alt="Patola Foil Print Lehenga with Kurta Pajama Couple Outfit" />
+        <span>IshaHiya</span>
+        <h4>Patola Foil Print Lehenga with Kurta Pajama Couple Outfit</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=196'">
+        <img src="/uploads/1756583637_Matching_Navratri_Twinning_Cotton_With_Embroidery_Stylish_RE2037-1.jpg" alt="Matching Navratri Twinning Cotton With Embroidery Stylish" />
+        <span>IshaHiya</span>
+        <h4>Matching Navratri Twinning Cotton With Embroidery Stylish</h4>
+        <p>₹2,000.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=204'">
+        <img src="/uploads/1756839831_WhatsApp_Image_2025-09-02_at_6.13.14_PM_(2).jpeg" alt="Navratri Special Couples Combo" />
+        <span>IshaHiya</span>
+        <h4>Navratri Special Couples Combo</h4>
+        <p>₹3,150.00</p>
+      </div>
+          <div class="product" onclick="window.location.href='subshop1.php?category_id=256'">
+        <img src="/uploads/1758573038_Cotton_Kurta_with_Jacquard_Silk_Koti_Womens_Jacquard_Silk_Saree_-6.jpg" alt="Indian Couple Combo set" />
+        <span>IshaHiya</span>
+        <h4>Indian Couple Combo set</h4>
+        <p>₹2,500.00</p>
+      </div>
+      </div>
+
+  <!-- UPCOMING FESTIVAL -->
+  <div id="festival-upcoming" class="clothing-category">
+    <h2>Upcoming Festival</h2>
+      </div>
+
+  <!-- FESTIVAL BUMPER -->
+  <div id="festival-bumper" class="clothing-category">
+    <h2>Festival Bumper Offers</h2>
+        <div class="product" onclick="window.location.href='subshop1.php?category_id=242'">
+      <img src="/uploads/1758020969_Full_Sleeves_Slim_Fit_Classic_Shirt.avif" alt="Shirts" />
+      <span>IshaHiya</span>
+      <h4>Shirts</h4>
+      <p>₹1,000.00</p>
+    </div>
+    </div>
+</div>
+
+<section id="pagination" class="selection-p1">
+  <a href="#">1</a>
+  <a href="#">2</a>
+  <a href="#"><i class="fas fa-long-arrow-alt-right"></i></a>
+</section>
+
+<section id="newsletter" class="selection-p1 selection-m1">
+  <div class="newstext">
+    <h4>Sign up For Newsletters</h4>
+    <p>Get E-mail updates about our latest shop and <span>special offers</span></p>
+  </div>
+  <div class="form">
+    <input type="text" placeholder="Your email address" />
+    <button>Sign Up</button>
+  </div>
+</section>
+
+<style>
+/* ===== Newsletter Section ===== */
+#newsletter {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  background-image: url(img/b14.png);
+  background-repeat: no-repeat;
+  background-position: 20% 30%;
+  background-color: #041e42;
+  padding: 40px 50px;
+  gap: 20px;
+}
+
+#newsletter h4 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+#newsletter p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #818ea0;
+}
+
+#newsletter p span {
+  color: #ffbd27;
+}
+
+#newsletter .form {
+  display: flex;
+  width: 40%;
+  min-width: 280px;
+}
+
+#newsletter input {
+  height: 3.125rem;
+  padding: 0 1.25em;
+  font-size: 14px;
+  width: 75%;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  outline: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#newsletter button {
+  background-color: #008178;
+  color: #fff;
+  white-space: nowrap;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 3.125rem;
+  padding: 0 20px;
+  border: none;
+  cursor: pointer;
+}
+
+#newsletter button:hover {
+  background-color: #006f67;
+}
+
+/* ===== Footer Section ===== */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 40px 20px;
+  background: #fff;
+  color: #333;
+  font-family: Arial, sans-serif;
+  border-top: 1px solid #ccc;
+}
+
+.col {
+  flex: 1 1 220px;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.nav__logo-img {
+  max-width: 120px;
+  height: auto;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.col h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #ffcc00;
+  text-transform: uppercase;
+}
+
+.col p, 
+.col a {
+  display: block;
+  margin: 5px 0;
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.col a:hover {
+  color: #ffcc00;
+}
+
+.follow .icon {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.follow .icon a {
+  font-size: 18px;
+}
+
+.follow .icon a:hover {
+  opacity: 0.8;
+}
+
+.payment .payment-icons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.payment .payment-icons img {
+  max-width: 50px;
+  height: auto;
+}
+
+.copyright {
+  width: 100%;
+  text-align: center;
+  padding-top: 15px;
+  color: #666;
+  font-size: 12px;
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  #newsletter {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  #newsletter .form {
+    width: 100%;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .col {
+    flex: 1 1 100%;
+    margin-bottom: 25px;
+  }
+
+  .follow .icon, 
+  .payment .payment-icons {
+    justify-content: center;
+  }
+
+  .nav__logo-img {
+    margin: 0 auto 20px auto;
+  }
+}
+</style>
+
+<footer class="footer">
+  <div class="col">
+    <a href="index.php" class="nav__logo">
+      <img src="image/logo/logo.png" alt="Logo" class="nav__logo-img" />
+    </a>
+    <h4>CONTACT</h4>
+    <p><strong>Address:</strong> 5, Keshav Shardamani, Karamsad</p>
+    <p><strong>Phone:</strong> +91 9974328904 / +91 7201808176</p>
+    <div class="follow">
+      <h4>FOLLOW US</h4>
+      <div class="icon">
+        <a href="#"><i class="fab fa-facebook-f" style="color:#3b5998;"></i></a>
+        <a href="#"><i class="fab fa-twitter" style="color:#1da1f2;"></i></a>
+        <a href="#"><i class="fab fa-instagram" style="color:#e1306c;"></i></a>
+        <a href="#"><i class="fab fa-pinterest-p" style="color:#bd081c;"></i></a>
+        <a href="#"><i class="fab fa-youtube" style="color:#ff0000;"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <h4>ABOUT</h4>
+    <a href="About.php">About us</a>
+    <a href="delivery.php">Delivery Information</a>
+    <a href="privacy.php">Privacy Policy</a>
+    <a href="terms-and-conditions.php">Terms & Conditions</a>
+    <a href="contact.php">Contact Us</a>
+  </div>
+  <div class="col">
+    <h4>MY ACCOUNT</h4>
+    <a href="#">Sign In</a>
+    <a href="#">View Cart</a>
+    <a href="#">My Wishlist</a>
+    <a href="#">Track My Order</a>
+    <a href="#">Help</a>
+  </div>
+  <div class="col payment">
+    <h4>PAYMENT METHODS</h4>
+    <p>Secured Payment Gateways</p>
+    <div class="payment-icons">
+      <img src="image/sm-banner/pngegg.png" alt="payment">
+    </div>
+  </div>
+  <div class="copyright">
+    <p>&copy; 2024 IshaHiya.oneshop, Karamsad. All rights reserved.</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/917201808176?text=Hello,%20I%E2%80%99m%20interested%20in%20your%20products.%20Please%20share%20catalog/price%20list%20on%20WhatsApp."
+   class="whatsapp-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+         alt="WhatsApp" width="50" height="50">
+</a>
+
+<style>
+/* ===== WhatsApp Floating Button ===== */
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25D366;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    z-index: 999;
+    transition: transform 0.3s ease;
+}
+.whatsapp-float:hover {
+    transform: scale(1.1);
+}
+.whatsapp-float img {
+    width: 40px;
+    height: 40px;
+}
+</style>
+
+
+<script>
+const buttons = document.querySelectorAll(".category-buttons button");
+const categories = document.querySelectorAll(".clothing-category");
+
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    buttons.forEach(btn => btn.classList.remove("active"));
+    categories.forEach(category => category.classList.remove("visible"));
+    button.classList.add("active");
+
+    if (button.id === "men-btn") document.getElementById("men-clothing").classList.add("visible");
+    if (button.id === "women-btn") document.getElementById("women-clothing").classList.add("visible");
+    if (button.id === "kids-btn") document.getElementById("kids-clothing").classList.add("visible");
+    if (button.id === "Couple-btn") document.getElementById("couple-combo").classList.add("visible");
+    if (button.id === "festival-upcoming-btn") document.getElementById("festival-upcoming").classList.add("visible");
+    if (button.id === "festival-bumper-btn") document.getElementById("festival-bumper").classList.add("visible");
+  });
+});
+
+// Show category based on URL
+const urlParams = new URLSearchParams(window.location.search);
+const category = urlParams.get('category') || 'men';
+
+if(category === 'men') document.getElementById('men-btn').click();
+if(category === 'women') document.getElementById('women-btn').click();
+if(category === 'kids') document.getElementById('kids-btn').click();
+if(category === 'Couple') document.getElementById('Couple-btn').click();
+if(category === 'Upcoming Festival') document.getElementById('festival-upcoming-btn').click();
+if(category === 'Festival Bumper Offers') document.getElementById('festival-bumper-btn').click();
+</script>
+
+</body>
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'},{'ap':'cpsh-oh'},{'server':'sg2plzcpnl509590'},{'dcenter':'sg2'},{'cp_id':'10506822'},{'cp_cl':'8'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src='https://img1.wsimg.com/traffic-assets/js/tccl.min.js'></script></html>
+

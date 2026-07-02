@@ -1,0 +1,15 @@
+# ============================================================
+#  Admin Panel Routing Isolation
+# ============================================================
+# Enable RewriteEngine but DO NOT inherit parent SEO rules.
+# This completely stops the .php removal 301 redirects that were
+# breaking AJAX requests and causing RewriteBase conflicts on the IP.
+RewriteEngine On
+
+# Internally resolve extensionless URLs (e.g. /log to /log.php)
+# This ensures that if a browser cached the old 301 redirects,
+# or if a user manually types the URL without .php, it still works.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]

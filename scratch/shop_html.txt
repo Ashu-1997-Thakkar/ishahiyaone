@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+<!-- ✅ Primary Meta Tags -->
+<title>Shop Latest Collections - IshahiyaOne Online Store</title>
+<meta name="title" content="Shop Latest Collections - IshahiyaOne Online Store">
+<meta name="description" content="Browse our full range of products. From traditional Navratri outfits to modern essentials, find everything at IshahiyaOne.">
+<meta name="keywords" content="IshahiyaOne, online shopping India, Navratri collection, festival fashion, men's ethnic wear, women's designer wear, trending outfits">
+<meta name="author" content="IshahiyaOne">
+<link rel="canonical" href="https://ishahiyaone.shop/shop.php">
+<link rel="icon" type="image/png" sizes="32x32" href="image/logo/ishahiya-logo.png">
+<link rel="icon" type="image/png" sizes="16x16" href="image/logo/ishahiya-logo.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+<!-- ✅ Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ishahiyaone.shop/shop.php">
+<meta property="og:title" content="Shop Latest Collections - IshahiyaOne Online Store">
+<meta property="og:description" content="Browse our full range of products. From traditional Navratri outfits to modern essentials, find everything at IshahiyaOne.">
+<meta property="og:image" content="https://ishahiyaone.shop/image/logo/ishahiya-logo.png">
+
+<!-- ✅ Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://ishahiyaone.shop/shop.php">
+<meta property="twitter:title" content="Shop Latest Collections - IshahiyaOne Online Store">
+<meta property="twitter:description" content="Browse our full range of products. From traditional Navratri outfits to modern essentials, find everything at IshahiyaOne.">
+<meta property="twitter:image" content="https://ishahiyaone.shop/image/logo/ishahiya-logo.png">
+
+<!-- ✅ General Meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#d4af37">
+
+<!-- ✅ Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "IshahiyaOne",
+  "url": "https://ishahiyaone.shop",
+  "logo": "https://ishahiyaone.shop/logo.png",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+91-9974328904",
+    "contactType": "customer service",
+    "areaServed": "IN",
+    "availableLanguage": "en"
+  },
+  "sameAs": [
+    "https://facebook.com/ishahiyaone",
+    "https://instagram.com/ishahiyaone"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "url": "https://ishahiyaone.shop",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://ishahiyaone.shop/search.php?s={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- ✅ Base URL for Clean URL Asset Resolution -->
+<base href="/ishahiyaone/">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+<!-- HEADER TOP BAR -->
+<header class="header">
+  <div class="header__top">
+    <div class="container">
+      <!-- Contact Information Section -->
+      <div class="header__contact">
+        <span><i class="fa-solid fa-phone" style="color: var(--first-color);"></i> (+91) 9974328904</span>
+        <span style="color: #ccc;">|</span>
+        <span>India</span>
+      </div>
+
+      <!-- Alert News Section -->
+      <p class="header__alert-news">Discover unbeatable deals across your favorite products</p>
+
+      <!-- User Info Section (Login/Logout) -->
+      <div class="header__user-info">
+        <a href="log.php" class="header__top-action"><i class="fa-regular fa-user"></i> Login <span style="color: #ccc; margin: 0 4px;">|</span> Sign up</a>      </div>
+    </div>
+  </div>
+</header>
+
+
+<nav class="nav">
+  <!-- Logo -->
+  <a href="index.php" class="nav__logo">
+    <img src="image/logo/ishahiya-logo.png" alt="Ishahiya Logo" loading="lazy" style="max-height:55px; width:auto;">
+  </a>
+
+  <!-- Hamburger Menu -->
+  <div class="nav__toggle" id="nav-toggle">
+    <i class="fa-solid fa-bars"></i>
+  </div>
+
+  <!-- Menu -->
+  <div class="nav__menu" id="nav-menu">
+    <!-- Close Button -->
+    <div class="close-btn" id="close-btn">
+      <i class="fa-solid fa-times"></i>
+    </div>
+
+    <ul class="nav__list">
+      <li><a href="index.php" class="nav__link ">Home</a></li>
+      <li><a href="shop.php" class="nav__link active-link">Shop</a></li>
+      <li><a href="about.php" class="nav__link ">About</a></li>
+      <li><a href="accounts.php" class="nav__link ">Account</a></li>
+      <li><a href="contact.php" class="nav__link ">Contact</a></li>
+
+    </ul>
+  </div>
+
+  <!-- Search Form - Premium Design -->
+  <form action="search.php" method="get" class="search-form">
+    <input type="text" name="s" placeholder="Search for products, brands and more" required>
+    <button type="submit"><i class="fas fa-search"></i></button>
+  </form>
+
+  <!-- Wishlist + Cart -->
+  <div class="header__user-actions">
+    <a href="wishlist.php" class="header__action-btn">
+      <img src="image/icon/icon-heart.svg" alt="Wishlist Icon" />
+      <span class="count" id="wishlist-count">0</span>
+    </a>
+    <a href="cart.php" class="header__action-btn">
+      <img src="image/icon/icon-cart.svg" alt="Cart Icon" />
+      <span class="count">1</span>
+    </a>
+  </div>
+</nav>
+<!-- ✅ CATEGORY MENU BAR -->
+<div class="category-menu-container">
+  <div class="category-menu-wrapper">
+    <div class="category-menu swiper" id="categorySwiper">
+
+      <div class="swiper-wrapper">
+                        <div class="swiper-slide dropdown">
+                    <a href="shop.php?main=electronics" class="cat-link has-dropdown">
+                                                <i class="fa-solid fa-bolt-lightning cat-icon"></i>
+                        <span>Electronics</span>
+                                                    <i class="fa-solid fa-chevron-down arrow-down"></i>
+                                            </a>
+                                        <ul class="dropdown-menu">
+                                                     <li>
+                                <a href="subshop1.php?subcategory=computer-hardware-components">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-desktop sub-icon"></i>
+                                        <span>Computers Components</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=video-cameras-accessories">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-shield-halved sub-icon"></i>
+                                        <span>Video Cameras &amp; Accessories</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=spy-gadgets-cameras">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-shield-halved sub-icon"></i>
+                                        <span>Spy Gadgets &amp; Cameras</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=ctv-security-systems">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-shield-halved sub-icon"></i>
+                                        <span>CCTV systems</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=tablet-ereader-accessories">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-tablet-screen-button sub-icon"></i>
+                                        <span>Tablet &amp; E-Reader Accessories</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=certified-pre-owned-server-system">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-server sub-icon"></i>
+                                        <span>Server System</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=certified-pre-owned-computer-monitors">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-desktop sub-icon"></i>
+                                        <span>Computer Monitors</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=Printers-Scanners-Copiers">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-print sub-icon"></i>
+                                        <span>Printers, Scanners &amp; Copiers</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=drives-and-storage">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-hard-drive sub-icon"></i>
+                                        <span>Drives and Storage</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=certified-pre-owned-desktop-computers">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-desktop sub-icon"></i>
+                                        <span>Desktop Computers</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=certified-pre-owned-laptop">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-laptop sub-icon"></i>
+                                        <span>Laptop</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=certified-pre-owned-mobile-devices">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-mobile-screen-button sub-icon"></i>
+                                        <span>Mobile Devices</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                <li class="view-all">
+                            <a href="shop.php?main=electronics">
+                                View All Electronics                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </li>
+                    </ul>
+                                    </div>
+                                <div class="swiper-slide dropdown">
+                    <a href="shop.php?main=all generation fashion wear" class="cat-link has-dropdown">
+                                                <i class="fa-solid fa-shirt cat-icon"></i>
+                        <span>AllGen Fashion Wear</span>
+                                                    <i class="fa-solid fa-chevron-down arrow-down"></i>
+                                            </a>
+                                        <ul class="dropdown-menu">
+                                                     <li>
+                                <a href="subshop1.php?subcategory=fashion-jewellery">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-gem sub-icon"></i>
+                                        <span>Jewellery</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=family-combo-collection">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-people-pulling sub-icon"></i>
+                                        <span>Family Combo Collection</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=father-son-collection">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Father Son Collection</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=couple-combo-collection">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-people-pulling sub-icon"></i>
+                                        <span>Couple Combo collection</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=Kids-Wear">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-child-reaching sub-icon"></i>
+                                        <span>Kids Wear</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=Women-Wear">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-person-dress sub-icon"></i>
+                                        <span>Women Wear</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=MEN-Wear">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-person sub-icon"></i>
+                                        <span>MEN Wear</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                <li class="view-all">
+                            <a href="shop.php?main=all generation fashion wear">
+                                View All AllGen Fashion Wear                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </li>
+                    </ul>
+                                    </div>
+                                <div class="swiper-slide dropdown">
+                    <a href="shop.php?main=networking-structured-cabling" class="cat-link has-dropdown">
+                                                <i class="fa-solid fa-network-wired cat-icon"></i>
+                        <span>Networking &amp; Structured Cabling</span>
+                                                    <i class="fa-solid fa-chevron-down arrow-down"></i>
+                                            </a>
+                                        <ul class="dropdown-menu">
+                                                     <li>
+                                <a href="subshop1.php?subcategory=Switches-Servers">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-server sub-icon"></i>
+                                        <span>Switches &amp; Servers</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=wifi-routers-access-points">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-wifi sub-icon"></i>
+                                        <span>Access Points &amp; Routers</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=network-adapters-hardware">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-plug sub-icon"></i>
+                                        <span>Network Adapters &amp; Hardware</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                <li class="view-all">
+                            <a href="shop.php?main=networking-structured-cabling">
+                                View All Networking &amp; Structured Cabling                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </li>
+                    </ul>
+                                    </div>
+                                <div class="swiper-slide dropdown">
+                    <a href="shop.php?main=smart-home-connected-living" class="cat-link has-dropdown">
+                                                <i class="fa-solid fa-house-chimney cat-icon"></i>
+                        <span>Smart Home &amp; Connected Living</span>
+                                                    <i class="fa-solid fa-chevron-down arrow-down"></i>
+                                            </a>
+                                        <ul class="dropdown-menu">
+                                                     <li>
+                                <a href="subshop1.php?subcategory=gps-devices">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-location-crosshairs sub-icon"></i>
+                                        <span>GPS Devices</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=smart-lighting">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-lightbulb sub-icon"></i>
+                                        <span>Smart Lighting</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=home-security">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-shield-halved sub-icon"></i>
+                                        <span>Home Security</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=smart-energy-solutions">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-bolt-lightning sub-icon"></i>
+                                        <span>Smart Energy Solutions</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=wearable-technology">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-stopwatch-20 sub-icon"></i>
+                                        <span>Wearable Tech</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                <li class="view-all">
+                            <a href="shop.php?main=smart-home-connected-living">
+                                View All Smart Home &amp; Connected Living                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </li>
+                    </ul>
+                                    </div>
+                                <div class="swiper-slide dropdown">
+                    <a href="drt.php?main=bulk - sms - services" class="cat-link has-dropdown">
+                                                <i class="fa-solid fa-comment-sms cat-icon"></i>
+                        <span>Bulk SMS Services</span>
+                                                    <i class="fa-solid fa-chevron-down arrow-down"></i>
+                                            </a>
+                                        <ul class="dropdown-menu">
+                                                     <li>
+                                <a href="subshop1.php?subcategory=voice - call - services">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Voice Call Services</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=missed - call - alert - services">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Missed Call Alert Services</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=short -code -services">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Short Code Services</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=long - code - services">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Long Code Services</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=transactional- bulk -SMS - services">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Transactional Bulk SMS Services</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=promotional-bulk -SMS -services">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Promotional Bulk SMS Services</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                <li class="view-all">
+                            <a href="shop.php?main=bulk - sms - services">
+                                View All Bulk SMS Services                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </li>
+                    </ul>
+                                    </div>
+                                <div class="swiper-slide dropdown">
+                    <a href="drt.php?main=cattle - feed" class="cat-link has-dropdown">
+                                                <i class="fa-solid fa-cow cat-icon"></i>
+                        <span>Cattle Feed</span>
+                                                    <i class="fa-solid fa-chevron-down arrow-down"></i>
+                                            </a>
+                                        <ul class="dropdown-menu">
+                                                     <li>
+                                <a href="subshop1.php?subcategory=anoopam - dan">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-cow sub-icon"></i>
+                                        <span>Anoopam Dan</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=anoopam - khor">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-cow sub-icon"></i>
+                                        <span>Anoopam Khor</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=anoopam - nutriMash - mixture">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-circle-dot sub-icon"></i>
+                                        <span>Anoopam NutriMash Mixture</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=anoopam - powerMix - feed">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-bolt-lightning sub-icon"></i>
+                                        <span>Anoopam PowerMix Feed</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=anoopam - buffalo - feed">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-cow sub-icon"></i>
+                                        <span>Anoopam Buffalo Feed</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=anoopam - calf - starter">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-cow sub-icon"></i>
+                                        <span>Anoopam Calf Starter</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                <li class="view-all">
+                            <a href="shop.php?main=cattle - feed">
+                                View All Cattle Feed                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </li>
+                    </ul>
+                                    </div>
+                                <div class="swiper-slide dropdown">
+                    <a href="shop.php?main=Offer of the day" class="cat-link has-dropdown">
+                                                <i class="fa-solid fa-tags cat-icon"></i>
+                        <span>Bumper Offer</span>
+                                                    <i class="fa-solid fa-chevron-down arrow-down"></i>
+                                            </a>
+                                        <ul class="dropdown-menu">
+                                                     <li>
+                                <a href="subshop1.php?subcategory=Bumper Offer">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-fire-flame-curved sub-icon"></i>
+                                        <span>Offer of the day</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                     <li>
+                                <a href="subshop1.php?subcategory=Festival -offers">
+                                    <div class="sub-link-content">
+                                        <i class="fa-solid fa-fire-flame-curved sub-icon"></i>
+                                        <span>Festival  Offers</span>
+                                    </div>
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                                                <li class="view-all">
+                            <a href="shop.php?main=Offer of the day">
+                                View All Bumper Offer                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </li>
+                    </ul>
+                                    </div>
+                      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Category Swiper & Dropdown JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof Swiper === 'undefined') return;
+
+  // Initialize Category Swiper
+  new Swiper('#categorySwiper', {
+    slidesPerView: 'auto',
+    spaceBetween: 0,
+    freeMode: true,
+    watchOverflow: true,
+    centerInsufficientSlides: false,
+    grabCursor: false,
+    slidesOffsetBefore: 0,
+    slidesOffsetAfter: 0,
+    scrollbar: false,
+    breakpoints: {
+      1025: { slidesOffsetBefore: 0, slidesOffsetAfter: 20, freeMode: false },
+      768:  { slidesOffsetBefore: 0, slidesOffsetAfter: 10 }
+    }
+  });
+
+  // ── Mobile only: tap to toggle dropdown ──────────────────────────────────
+  document.querySelectorAll('.swiper-slide.dropdown > a').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      if (window.innerWidth > 768) return; // desktop: let CSS :hover handle it
+
+      var slide = this.parentElement;
+      var wasActive = slide.classList.contains('active');
+      // Close all open dropdowns first
+      document.querySelectorAll('.swiper-slide.dropdown.active')
+              .forEach(function(el) { el.classList.remove('active'); });
+      if (!wasActive) {
+        e.preventDefault();
+        slide.classList.add('active');
+      }
+    });
+  });
+
+  // Close mobile dropdown on outside click
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.swiper-slide.dropdown')) {
+      document.querySelectorAll('.swiper-slide.dropdown.active')
+              .forEach(function(el) { el.classList.remove('active'); });
+    }
+  });
+});
+</script>
+
+
+<style>
+/* Exact styling from live site */
+#sh-banner {
+  background-image: url('shop_admin/uploads/hero/slide_1781701214_4356.png');
+  background-color: #111;
+  width: 100%;
+  height: 40vh;
+  min-height: 250px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  padding: 14px;
+}
+#sh-banner h4 { color: rgb(86, 219, 219); font-size: 24px; margin-bottom: 10px; }
+#sh-banner h2 { color: whitesmoke; font-size: 36px; font-weight: 700; }
+
+.category-container { text-align: center; padding: 40px 20px; background: #fff; }
+.category-buttons { margin-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.category-buttons button { background-color: #e6e6e6; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; transition: all 0.3s ease; font-size: 16px; font-weight: 600; color: #333; }
+.category-buttons button:hover { background-color: #cccccc; transform: scale(1.05); }
+.category-buttons button.active { background-color: #00897b; color: white; }
+
+.clothing-category { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.clothing-category.visible { display: block; opacity: 1; transform: translateY(0); }
+.clothing-category h2 { font-size: 30px; margin-bottom: 25px; color: #111; font-weight: 700; }
+
+.products-wrapper { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+
+.product {
+  display: inline-block;
+  width: 280px;
+  text-align: center;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.product:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+.product img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+.product span { display: block; font-size: 13px; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+.product h4 { font-size: 16px; color: #222; margin: 0 0 10px 0; font-weight: 600; min-height: 40px; }
+.product p { color: #d4af37; font-size: 18px; font-weight: 700; margin: 0; }
+</style>
+
+<section id="sh-banner">
+  </section>
+
+<div class="category-container">
+  <div class="category-buttons">
+          <button id="btn-6" class="active" data-slug="electronics">
+        Electronics      </button>
+          <button id="btn-7" class="" data-slug="all generation fashion wear">
+        AllGen Fashion Wear      </button>
+          <button id="btn-10" class="" data-slug="networking-structured-cabling">
+        Networking &amp; Structured Cabling      </button>
+          <button id="btn-11" class="" data-slug="smart-home-connected-living">
+        Smart Home &amp; Connected Living      </button>
+          <button id="btn-15" class="" data-slug="bulk - sms - services">
+        Bulk SMS Services      </button>
+          <button id="btn-17" class="" data-slug="cattle - feed">
+        Cattle Feed      </button>
+          <button id="btn-19" class="" data-slug="Offer of the day">
+        Bumper Offer      </button>
+      </div>
+
+    <div id="cat-6" class="clothing-category visible">
+    <h2>Electronics</h2>
+    <div class="products-wrapper">
+              <p>No products available in this category yet.</p>
+          </div>
+  </div>
+    <div id="cat-7" class="clothing-category ">
+    <h2>AllGen Fashion Wear</h2>
+    <div class="products-wrapper">
+              <div class="product" onclick="window.location.href='subshop1.php?category_id=30'">
+          <img src="shop_admin/uploads/subshop/1781640632_6a31adb852b8f.png" alt="Puma T-Shirt">
+          <span>IshaHiya</span>
+          <h4>Puma T-Shirt</h4>
+          <p>₹450.00</p>
+        </div>
+              <div class="product" onclick="window.location.href='subshop1.php?category_id=26'">
+          <img src="shop_admin/uploads/subshop/1781632901_6a318f8570326.png" alt="Allen Solly Polo T-Shirt">
+          <span>IshaHiya</span>
+          <h4>Allen Solly Polo T-Shirt</h4>
+          <p>₹450.00</p>
+        </div>
+          </div>
+  </div>
+    <div id="cat-10" class="clothing-category ">
+    <h2>Networking &amp; Structured Cabling</h2>
+    <div class="products-wrapper">
+              <p>No products available in this category yet.</p>
+          </div>
+  </div>
+    <div id="cat-11" class="clothing-category ">
+    <h2>Smart Home &amp; Connected Living</h2>
+    <div class="products-wrapper">
+              <p>No products available in this category yet.</p>
+          </div>
+  </div>
+    <div id="cat-15" class="clothing-category ">
+    <h2>Bulk SMS Services</h2>
+    <div class="products-wrapper">
+              <p>No products available in this category yet.</p>
+          </div>
+  </div>
+    <div id="cat-17" class="clothing-category ">
+    <h2>Cattle Feed</h2>
+    <div class="products-wrapper">
+              <p>No products available in this category yet.</p>
+          </div>
+  </div>
+    <div id="cat-19" class="clothing-category ">
+    <h2>Bumper Offer</h2>
+    <div class="products-wrapper">
+              <p>No products available in this category yet.</p>
+          </div>
+  </div>
+  </div>
+
+<div class="footer-wrapper">
+    <!-- Global Premium Newsletter Component -->
+    <!-- Premium Newsletter Section -->
+<div class="footer-newsletter">
+    <div class="newsletter-inner">
+        <div class="newsletter-text">
+            <h4><i class="fa-regular fa-envelope"></i> Sign up for Newsletter</h4>
+            <p>Get email updates about our latest shop and <span class="text-gold">special offers</span></p>
+        </div>
+        <form class="newsletter-form" id="global-newsletter-form">
+            <input type="email" id="global-newsletter-email" placeholder="Your email address" required>
+            <button type="submit" id="global-newsletter-btn">Subscribe</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const newsletterForm = document.getElementById('global-newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('global-newsletter-email');
+            const btn = document.getElementById('global-newsletter-btn');
+            const originalText = btn.innerHTML;
+            const email = emailInput.value.trim();
+            
+            if(email) {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+                btn.disabled = true;
+                
+                fetch('subscribe_newsletter.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'email=' + encodeURIComponent(email)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Subscribed Successfully!',
+                                text: 'Thank you for subscribing to our newsletter.',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                background: '#111',
+                                color: '#d4af37'
+                            });
+                        } else {
+                            alert('Thank you for subscribing!');
+                        }
+                        emailInput.value = '';
+                        btn.innerHTML = '<i class="fas fa-check"></i> Subscribed';
+                    } else {
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Notice',
+                                text: data.message,
+                                background: '#111',
+                                color: '#fff'
+                            });
+                        } else {
+                            alert(data.message);
+                        }
+                        btn.innerHTML = originalText;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    btn.innerHTML = originalText;
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    setTimeout(() => {
+                        if (btn.innerHTML.includes('Subscribed')) {
+                            btn.innerHTML = originalText;
+                        }
+                    }, 3000);
+                });
+            }
+        });
+    }
+});
+</script>
+
+    <!-- Main Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <!-- Brand & Contact -->
+            <div class="footer__col">
+                <a href="index.php" class="footer__logo">
+                    <img src="image/logo/ishahiya-logo.png" alt="Ishahiya Logo" class="footer__logo-img">
+                </a>
+                <p class="footer__desc">Your premium destination for high-quality electronics, fashion, and lifestyle products with unbeatable deals.</p>
+                 <h4 class="footer__title">Contact</h4>
+                <div class="footer__contact">
+                    <p><i class="fa-solid fa-location-dot"></i> 5, Keshav Shardamani, Karamsad</p>
+                    <p><i class="fa-solid fa-phone"></i> +91 99743 28904</p>
+                    <p><i class="fa-solid fa-phone"></i> +91 72018 08176</p>
+                </div>
+                <div class="footer__social-links">
+                    <a href="https://www.facebook.com/share/1NmMBy5VP4/" target="_blank" class="footer__social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/ishahiyaone?igsh=MXYzc21reWFqMGJ6Nw==" target="_blank" class="footer__social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" class="footer__social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank" class="footer__social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer__col">
+                <h4 class="footer__title">About Us</h4>
+                <ul class="footer__links">
+                    <li><a href="About.php">Our Story</a></li>
+                    <li><a href="delivery.php">Delivery Information</a></li>
+                    <li><a href="privacy.php">Privacy Policy</a></li>
+                    <li><a href="terms-and-conditions.php">Terms & Conditions</a></li>
+                    <li><a href="Cancellation_Return_Refund_Policy.php">Return Policy</a></li>
+                    <li><a href="contact.php">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Account Links -->
+            <div class="footer__col">
+                <h4 class="footer__title">My Account</h4>
+                <ul class="footer__links">
+                    <li><a href="log.php">Sign In / Register</a></li>
+                    <li><a href="cart.php">View Cart</a></li>
+                    <li><a href="wishlist.php">My Wishlist</a></li>
+                    <li><a href="track-order.php">Track My Order</a></li>
+                    <li><a href="help.php">Help Center</a></li>
+                </ul>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="footer__col">
+                <h4 class="footer__title">Secure Payment</h4>
+                <p class="footer__desc">We offer safe and secure payment options for all our customers.</p>
+                <div class="footer__payment">
+                    <p>100% Secure Checkout</p>
+                    <div class="footer__payment-icons">
+                        <img src="image/sm-banner/pngegg.png" alt="Payment Methods">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer__bottom">
+            <p>&copy; 2026 IshahiyaOne.shop. Owned & operated by BR IT SOLUTION AND BR CATTLE FEED. GSTIN: 24AXGPP5413P1Z3</p>
+            <div class="footer__bottom-links">
+                <a href="privacy.php">Privacy Policy</a>
+                <a href="terms-and-conditions.php">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/917201808176?text=Hello,%20I%E2%80%99m%20interested%20in%20your%20products." class="whatsapp-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+</a>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Mobile Nav Backdrop -->
+<div class="nav__backdrop" id="nav-backdrop"></div>
+
+<script>
+    // Navigation toggle logic (global)
+    document.addEventListener('DOMContentLoaded', () => {
+        const navToggle  = document.getElementById("nav-toggle");
+        const navMenu    = document.getElementById("nav-menu");
+        const closeBtn   = document.getElementById("close-btn");
+        const backdrop   = document.getElementById("nav-backdrop");
+
+        function openMenu() {
+            if (!navMenu) return;
+            navMenu.classList.add("show-menu");
+            if (backdrop) backdrop.classList.add("show");
+            document.body.style.overflow = "hidden"; // Prevent scroll behind drawer
+        }
+
+        function closeMenu() {
+            if (!navMenu) return;
+            navMenu.classList.remove("show-menu");
+            if (backdrop) backdrop.classList.remove("show");
+            document.body.style.overflow = ""; // Restore scroll
+        }
+
+        if (navToggle) navToggle.addEventListener("click", openMenu);
+        if (closeBtn)  closeBtn.addEventListener("click",  closeMenu);
+        if (backdrop)  backdrop.addEventListener("click",  closeMenu);
+
+        // Close on nav link click (single page feel)
+        if (navMenu) {
+            navMenu.querySelectorAll('.nav__link').forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeMenu();
+        });
+    });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll(".category-buttons button");
+    const categories = document.querySelectorAll(".clothing-category");
+    const urlParams = new URLSearchParams(window.location.search);
+    const categorySlug = urlParams.get('main');
+
+    let targetButton = null;
+
+    buttons.forEach(button => {
+      // If URL matches slug, prepare to activate it
+      if (categorySlug && button.getAttribute('data-slug') === categorySlug) {
+          targetButton = button;
+      }
+
+      button.addEventListener("click", () => {
+        // Remove active class from all buttons
+        buttons.forEach(btn => btn.classList.remove("active"));
+        // Remove visible class from all categories
+        categories.forEach(category => category.classList.remove("visible"));
+        
+        // Add active to clicked button
+        button.classList.add("active");
+
+        // Extract ID and show corresponding category
+        const catId = button.id.replace('btn-', '');
+        const targetCategory = document.getElementById('cat-' + catId);
+        if (targetCategory) {
+            targetCategory.classList.add("visible");
+        }
+      });
+    });
+
+    // Auto-click if arrived from a link (like the Hero Slider)
+    if (targetButton) {
+        targetButton.click();
+    }
+});
+</script>
+</body>
+</html>

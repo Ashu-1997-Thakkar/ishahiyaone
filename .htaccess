@@ -1,0 +1,125 @@
+# ============================================================
+#  IshahiyaOne — Security .htaccess (Apache 2.4 Optimized)
+# ============================================================
+
+# ─── Block direct access to sensitive system files ──────────
+<FilesMatch "^(config\.php|db\.php|velvetvougedb\.sql|error_log|php-error\.log)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ─── Prevent directory listing ───────────────────────────────
+Options -Indexes
+
+# ─── Block access to backup and log files ────────────────────
+<FilesMatch "\.(bak|sql|log|env|old|orig|swp|tmp)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ─── Protect .htaccess itself ────────────────────────────────
+<Files ".htaccess">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
+</Files>
+
+# ─── Set default charset ─────────────────────────────────────
+AddDefaultCharset UTF-8
+
+# ─── Remove server signature ─────────────────────────────────
+ServerSignature Off
+
+# ============================================================
+#  SEO Friendly Clean URLs & Routing
+# ============================================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # --- Clean URL Routing for About page (Case-Insensitive for Linux) ---
+    RewriteCond %{ENV:REDIRECT_STATUS} ^$
+    RewriteRule ^[Aa]bout\.php$ /about [R=301,L]
+    RewriteRule ^about/?$ about.php [NC,L]
+
+    # --- 1. Custom eCommerce Routing ---
+    # Capture the base URL path to avoid physical path leaks
+    RewriteCond %{REQUEST_URI} ^(.*?)/?drt\.php$ [NC]
+    RewriteRule ^ - [E=BASE:%1]
+
+    # Redirect old /drt.php?product_id=21 to /product/21 (301 Permanent)
+    RewriteCond %{ENV:REDIRECT_STATUS} ^$
+    RewriteCond %{QUERY_STRING} ^product_id=([0-9]+)$ [NC]
+    RewriteRule ^drt\.php$ %{ENV:BASE}/product/%1? [R=301,L]
+
+    # Internally route /product/21 back to drt.php
+    RewriteRule ^product/([0-9]+)/?$ drt.php?product_id=$1 [QSA,L]
+
+    # --- 2. Remove index.php ---
+    # Redirect /index.php to the directory root
+    RewriteCond %{ENV:REDIRECT_STATUS} ^$
+    RewriteCond %{REQUEST_URI} ^(.*)index\.php$ [NC]
+    RewriteRule ^.*$ %1 [R=301,L]
+
+    # --- 3. Remove .php extension globally ---
+    # Redirect /page.php to /page (Only for direct browser requests, excluding POST and AJAX)
+    RewriteCond %{ENV:REDIRECT_STATUS} ^$
+    RewriteCond %{REQUEST_METHOD} !POST
+    RewriteCond %{HTTP:X-Requested-With} !=XMLHttpRequest
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_URI} ^(.*)\.php$ [NC]
+    RewriteRule ^.*$ %1 [R=301,L]
+
+    # --- 4. Resolve extensionless URLs ---
+    # If the requested URL is not a directory or an existing file, try appending .php
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME}\.php -f
+    RewriteRule ^(.*)$ $1.php [L]
+</IfModule>
+
+# ─── PHP Upload Limits ──────────────────────────────────────────
+php_value upload_max_filesize 20M
+php_value post_max_size 25M
+php_value memory_limit 128M
+php_value max_execution_time 300
+php_value max_input_time 300
+
+# ============================================================
+#  Browser Caching & PageSpeed Optimization
+# ============================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|webp|avif|svg)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
+</IfModule>
