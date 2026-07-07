@@ -269,6 +269,46 @@ $stmt->close();
                 $items_stmt->execute();
                 $items_result = $items_stmt->get_result();
                 
+                // Self-healing fallback if order_items is empty (e.g. historical Razorpay orders)
+                if ($items_result->num_rows === 0 && !empty($order['billing_details']['product_name'])) {
+                    $prod_names = explode(',', $order['billing_details']['product_name']);
+                    $ord_id_val = (int)$order_id;
+                    foreach ($prod_names as $p_name) {
+                        $p_name = trim($p_name);
+                        if (empty($p_name)) continue;
+                        $lookup = $conn->prepare("
+                            SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, size FROM subcategories WHERE name LIKE CONCAT('%', ?, '%')
+                            UNION ALL
+                            SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, '' AS size FROM all_category WHERE name LIKE CONCAT('%', ?, '%')
+                            UNION ALL
+                            SELECT name, price, COALESCE(NULLIF(image, ''), 'uploads/no-image.png') AS img, '' AS size FROM products WHERE name LIKE CONCAT('%', ?, '%')
+                            UNION ALL
+                            SELECT title AS name, 0 AS price, COALESCE(NULLIF(banner_image, ''), 'uploads/no-image.png') AS img, '' AS size FROM bumper_offers WHERE title LIKE CONCAT('%', ?, '%')
+                            LIMIT 1
+                        ");
+                        $lookup->bind_param("ssss", $p_name, $p_name, $p_name, $p_name);
+                        $lookup->execute();
+                        $l_res = $lookup->get_result()->fetch_assoc();
+                        $lookup->close();
+                        
+                        $ins_name = $l_res['name'] ?? $p_name;
+                        $ins_price = (float)($l_res['price'] ?? 0);
+                        if ($ins_price == 0 && !empty($order['total_price'])) {
+                            $ins_price = (float)$order['total_price'] / max(1, count($prod_names));
+                        }
+                        $ins_img = $l_res['img'] ?? '';
+                        $ins_size = $l_res['size'] ?? '';
+                        
+                        $ins_oi = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price, image) VALUES (?, ?, ?, 1, ?, ?)");
+                        $ins_oi->bind_param("issds", $ord_id_val, $ins_name, $ins_size, $ins_price, $ins_img);
+                        $ins_oi->execute();
+                        $ins_oi->close();
+                    }
+                    // Re-query order_items after self-healing
+                    $items_stmt->execute();
+                    $items_result = $items_stmt->get_result();
+                }
+                
                 while ($item = $items_result->fetch_assoc()):
                     $img = !empty($item['Image1']) ? $item['Image1'] : 'uploads/no-image.png';
                     // Determine path

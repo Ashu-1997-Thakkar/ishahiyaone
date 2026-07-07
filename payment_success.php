@@ -73,13 +73,20 @@ if ( !empty($customer_mobile) ){
 $stmt = $conn->prepare("
     UPDATE billing_details
     SET payment_status = 'SUCCESS'
-    WHERE id = ? AND payment_status = 'PENDING'
+    WHERE id = ?
 ");
 $stmt->bind_param("i", $billing_id);
-if ($stmt->execute() && $stmt->affected_rows > 0) {
-    $stmt->close();
+$stmt->execute();
+$stmt->close();
 
-    /* ✅ FINALIZING ORDER: Insert Items & Deduct Stock */
+/* ✅ FINALIZING ORDER: Insert Items & Deduct Stock if not already inserted */
+$chk_oi = $conn->prepare("SELECT COUNT(*) as cnt FROM order_items WHERE order_id = ?");
+$chk_oi->bind_param("i", $order_id);
+$chk_oi->execute();
+$res_oi = $chk_oi->get_result()->fetch_assoc();
+$chk_oi->close();
+
+if ($res_oi['cnt'] == 0) {
     $final_items = [];
     $user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
 
@@ -138,8 +145,6 @@ if ($stmt->execute() && $stmt->affected_rows > 0) {
             $stock_stmt->close();
         }
     }
-} else {
-    $stmt->close();
 }
 
 /* ✅ DELETE ONLY THIS USER'S CART (Fixed: was deleting ALL users' carts!) */

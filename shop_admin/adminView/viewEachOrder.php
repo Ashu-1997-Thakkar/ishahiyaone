@@ -37,6 +37,50 @@
 
             // Execute the query
             $result = $conn->query($sql);
+            
+            // Self-healing fallback if order_items is empty for this order
+            if ($result && $result->num_rows === 0) {
+                $ord_q = $conn->query("SELECT * FROM orders WHERE id = $orderID LIMIT 1");
+                if ($ord_q && $ord_row = $ord_q->fetch_assoc()) {
+                    $u_id = (int)($ord_row['user_id'] ?? 0);
+                    $tot = (float)($ord_row['total_price'] ?? 0);
+                    $phone = $conn->real_escape_string($ord_row['Contact'] ?? '');
+                    $ord_time = $conn->real_escape_string($ord_row['order_date'] ?? '');
+                    $b_q = $conn->query("SELECT * FROM billing_details WHERE (user_id = $u_id OR mobile = '$phone' OR alt_mobile = '$phone') AND ABS(total_amount - $tot) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, created_at, '$ord_time')) ASC LIMIT 1");
+                    if ($b_q && $b_row = $b_q->fetch_assoc()) {
+                        if (!empty($b_row['product_name'])) {
+                            $prod_names = explode(',', $b_row['product_name']);
+                            foreach ($prod_names as $p_name) {
+                                $p_name = trim($p_name);
+                                if (empty($p_name)) continue;
+                                $p_safe = $conn->real_escape_string($p_name);
+                                $l_q = $conn->query("
+                                    SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, size FROM subcategories WHERE name LIKE '%$p_safe%'
+                                    UNION ALL
+                                    SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, '' AS size FROM all_category WHERE name LIKE '%$p_safe%'
+                                    UNION ALL
+                                    SELECT name, price, COALESCE(NULLIF(image, ''), 'uploads/no-image.png') AS img, '' AS size FROM products WHERE name LIKE '%$p_safe%'
+                                    UNION ALL
+                                    SELECT title AS name, 0 AS price, COALESCE(NULLIF(banner_image, ''), 'uploads/no-image.png') AS img, '' AS size FROM bumper_offers WHERE title LIKE '%$p_safe%'
+                                    LIMIT 1
+                                ");
+                                $l_res = ($l_q) ? $l_q->fetch_assoc() : null;
+                                $ins_name = $conn->real_escape_string($l_res['name'] ?? $p_name);
+                                $ins_price = (float)($l_res['price'] ?? 0);
+                                if ($ins_price == 0 && $tot > 0) {
+                                    $ins_price = $tot / max(1, count($prod_names));
+                                }
+                                $ins_img = $conn->real_escape_string($l_res['img'] ?? '');
+                                $ins_size = $conn->real_escape_string($l_res['size'] ?? '');
+                                
+                                $conn->query("INSERT INTO order_items (order_id, product_name, size, quantity, price, image) VALUES ($orderID, '$ins_name', '$ins_size', 1, $ins_price, '$ins_img')");
+                            }
+                            $result = $conn->query($sql);
+                        }
+                    }
+                }
+            }
+            
             $count = 1;
 
             // Check if there are results
