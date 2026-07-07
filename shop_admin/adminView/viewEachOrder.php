@@ -1,4 +1,4 @@
-﻿<div class="container">
+<div class="container">
   <table class="table table-striped">
     <thead>
         <tr>
@@ -21,13 +21,17 @@
             // Query to retrieve data from the order_item table
             $sql = "
               SELECT 
-                oi.image AS product_image, 
+                COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image, 'no-image.png') AS product_image, 
                 oi.product_name, 
                 oi.size, 
                 oi.quantity, 
                 oi.price 
               FROM order_items oi
+              LEFT JOIN subcategories sc ON (oi.product_name COLLATE utf8mb4_general_ci = sc.name COLLATE utf8mb4_general_ci OR sc.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', sc.name COLLATE utf8mb4_general_ci, '%'))
+              LEFT JOIN all_category ac ON (oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci OR ac.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', ac.name COLLATE utf8mb4_general_ci, '%'))
+              LEFT JOIN products p ON (oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci OR p.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', p.name COLLATE utf8mb4_general_ci, '%'))
               WHERE oi.order_id = $orderID
+              GROUP BY oi.id
             ";
 
             // Execute the query
@@ -38,11 +42,21 @@
             if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     // Construct full image URL
-                    $imageURL = "../shop_admin/uploads/" . htmlspecialchars($row["product_image"]);
+                    $img = $row["product_image"];
+                    $imageURL = "../assets/no-image.png";
+                    if (file_exists(__DIR__ . "/../" . $img)) {
+                        $imageURL = "../" . $img;
+                    } elseif (file_exists(__DIR__ . "/../shop_admin/" . $img)) {
+                        $imageURL = "../shop_admin/" . $img;
+                    } elseif (file_exists(__DIR__ . "/../shop_admin/uploads/subshop/" . basename($img))) {
+                        $imageURL = "../shop_admin/uploads/subshop/" . basename($img);
+                    } elseif (file_exists(__DIR__ . "/../shop_admin/uploads/" . basename($img))) {
+                        $imageURL = "../shop_admin/uploads/" . basename($img);
+                    }
       ?>
                     <tr>
                         <td><?= $count ?></td>
-                        <td><img height="80px" src="<?= $imageURL ?>" alt="Product Image"></td>
+                        <td><img height="80px" src="<?= htmlspecialchars($imageURL) ?>" alt="Product Image" style="object-fit:contain; border-radius:4px; background:#111;"></td>
                         <td><?= htmlspecialchars($row["product_name"]) ?></td>
                         <td><?= htmlspecialchars($row["size"]) ?></td>
                         <td><?= htmlspecialchars($row["quantity"]) ?></td>

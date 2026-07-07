@@ -29,8 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_SESSION['otp'] == $otp) {
                 try {
                     // Step 5: Check if customer exists
-                    $stmt = $conn->prepare("SELECT id, Mobile_Number FROM Customer WHERE Mobile_Number = ?
-");
+                    $stmt = $conn->prepare("SELECT id, Mobile_Number FROM customer WHERE Mobile_Number = ?");
                     $stmt->bind_param("s", $mobile_number);
                     $stmt->execute();
                     $result = $stmt->get_result();
@@ -38,19 +37,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if ($customer === null) {
                         // New customer: Insert record
-                        $stmt_insert = $conn->prepare("INSERT INTO Customer (Mobile_Number, is_verified, Date) VALUES (?, 1, NOW())");
+                        $stmt_insert = $conn->prepare("INSERT INTO customer (Mobile_Number, is_verified, Date) VALUES (?, 1, NOW())");
                         $stmt_insert->bind_param("s", $mobile_number);
                         $stmt_insert->execute();
 
                         // Get the newly inserted customer
-                        $stmt = $conn->prepare("SELECT id, Mobile_Number FROM Customer WHERE Mobile_Number = ?");
+                        $stmt = $conn->prepare("SELECT id, Mobile_Number FROM customer WHERE Mobile_Number = ?");
                         $stmt->bind_param("s", $mobile_number);
                         $stmt->execute();
                         $result = $stmt->get_result();
                         $customer = $result->fetch_assoc();
                     } else {
                         // Existing customer: Update verified status
-                        $stmt_update = $conn->prepare("UPDATE Customer SET is_verified = 1, Date = NOW() WHERE Mobile_Number = ?");
+                        $stmt_update = $conn->prepare("UPDATE customer SET is_verified = 1, Date = NOW() WHERE Mobile_Number = ?");
                         $stmt_update->bind_param("s", $mobile_number);
                         $stmt_update->execute();
                     }

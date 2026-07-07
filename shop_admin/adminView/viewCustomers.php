@@ -4,7 +4,7 @@ include_once dirname(__DIR__) . "/config/dbconnect.php";
 include_once dirname(__DIR__) . "/config/pagination_helper.php";
 
 // ✅ Role-based restriction
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'superadmin'])) {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'super_admin', 'superadmin'])) {
     echo "<div class='alert alert-danger'>Access Denied</div>";
     exit;
 }

@@ -25,6 +25,38 @@ if ($pid <= 0 || $qty <= 0) {
     exit("error:bad_input");
 }
 
+$name  = $_POST['product_name'] ?? $_POST['name'] ?? '';
+$price_raw = $_POST['product_price'] ?? $_POST['price'] ?? 0;
+if (is_string($price_raw)) {
+    $price_raw = preg_replace('/[^\d.]/', '', $price_raw);
+}
+$price = (float)$price_raw;
+$image = $_POST['product_image'] ?? $_POST['image'] ?? $_POST['images1'] ?? '';
+$sku   = $_POST['sku_no'] ?? $_POST['sku'] ?? '';
+
+// Fallback to DB lookup across all product tables if details are missing
+if (empty($name) || $price <= 0 || empty($image)) {
+    try {
+        $pStmt = $conn->prepare("
+            SELECT name, price, Image1 AS img, sku_no FROM all_category WHERE id = :p1
+            UNION ALL
+            SELECT name, price, Image1 AS img, sku_no FROM subcategories WHERE id = :p2
+            UNION ALL
+            SELECT name, price, image AS img, sku AS sku_no FROM products WHERE product_id = :p3
+            LIMIT 1
+        ");
+        $pStmt->execute([':p1' => $pid, ':p2' => $pid, ':p3' => $pid]);
+        $pRow = $pStmt->fetch(PDO::FETCH_ASSOC);
+        if ($pRow) {
+            if (empty($name)) $name = $pRow['name'];
+            if ($price <= 0) $price = (float)$pRow['price'];
+            if (empty($image)) $image = $pRow['img'];
+            if (empty($sku)) $sku = $pRow['sku_no'];
+        }
+    } catch (Exception $ex) {}
+}
+if (empty($name)) $name = "Product #$pid";
+
 $user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
 
 if ($user_id > 0) {
@@ -34,11 +66,11 @@ if ($user_id > 0) {
         $row = $check->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
-            $upd = $conn->prepare("UPDATE cart SET quantity = quantity + :q WHERE id = :id AND user_id = :uid");
-            $upd->execute([':q' => $qty, ':id' => $row['id'], ':uid' => $user_id]);
+            $upd = $conn->prepare("UPDATE cart SET quantity = quantity + :q, name = COALESCE(NULLIF(:name, ''), name), price = IF(:price > 0, :price, price), images1 = COALESCE(NULLIF(:img, ''), images1), sku_no = COALESCE(NULLIF(:sku, ''), sku_no) WHERE id = :id AND user_id = :uid");
+            $upd->execute([':q' => $qty, ':name' => $name, ':price' => $price, ':img' => $image, ':sku' => $sku, ':id' => $row['id'], ':uid' => $user_id]);
         } else {
-            $ins = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity, size) VALUES (:uid, :pid, :q, :size)");
-            $ins->execute([':uid' => $user_id, ':pid' => $pid, ':q' => $qty, ':size' => $size]);
+            $ins = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity, size, name, price, images1, sku_no) VALUES (:uid, :pid, :q, :size, :name, :price, :img, :sku)");
+            $ins->execute([':uid' => $user_id, ':pid' => $pid, ':q' => $qty, ':size' => $size, ':name' => $name, ':price' => $price, ':img' => $image, ':sku' => $sku]);
         }
 
         exit("success");
@@ -51,25 +83,16 @@ if ($user_id > 0) {
     if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-    
-    // Fetch price/details from DB if possible so session cart has complete data
-    $price = 0;
-    $name = "Product #$pid";
-    $image = "";
-    try {
-        $pStmt = $conn->prepare("SELECT name, price, original_price, img FROM products WHERE id = :pid LIMIT 1");
-        $pStmt->execute([':pid' => $pid]);
-        $pRow = $pStmt->fetch(PDO::FETCH_ASSOC);
-        if ($pRow) {
-            $name = $pRow['name'];
-            $price = (float)$pRow['price'];
-            $image = $pRow['img'];
-        }
-    } catch (Exception $ex) {}
 
     if (isset($_SESSION['cart'][$pid])) {
         $_SESSION['cart'][$pid]['quantity'] += $qty;
         if ($size !== '') $_SESSION['cart'][$pid]['size'] = $size;
+        if ($price > 0) $_SESSION['cart'][$pid]['price'] = $price;
+        if (!empty($name)) $_SESSION['cart'][$pid]['name'] = $name;
+        if (!empty($image)) {
+            $_SESSION['cart'][$pid]['image'] = $image;
+            $_SESSION['cart'][$pid]['images1'] = $image;
+        }
     } else {
         $_SESSION['cart'][$pid] = [
             'id' => $pid,
@@ -79,7 +102,8 @@ if ($user_id > 0) {
             'quantity' => $qty,
             'size' => $size,
             'image' => $image,
-            'images1' => $image
+            'images1' => $image,
+            'sku_no' => $sku
         ];
     }
     exit("success");

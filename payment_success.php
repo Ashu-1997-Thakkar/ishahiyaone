@@ -93,7 +93,8 @@ if ($stmt->execute() && $stmt->affected_rows > 0) {
                 'name' => $row['name'],
                 'size' => $row['size'],
                 'quantity' => (int)$row['quantity'],
-                'price' => (float)$row['price']
+                'price' => (float)$row['price'],
+                'image' => $row['images1'] ?? ''
             ];
         }
         $cart_stmt->close();
@@ -103,7 +104,8 @@ if ($stmt->execute() && $stmt->affected_rows > 0) {
                 'name' => $item['name'],
                 'size' => $item['size'],
                 'quantity' => (int)$item['quantity'],
-                'price' => (float)$item['price']
+                'price' => (float)$item['price'],
+                'image' => $item['images1'] ?? ''
             ];
         }
     }
@@ -113,10 +115,11 @@ if ($stmt->execute() && $stmt->affected_rows > 0) {
         $size = $item['size'];
         $qty = $item['quantity'];
         $price = $item['price'];
+        $img = $item['image'] ?? '';
 
         // Insert into order_items
-        $stmt2 = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
-        $stmt2->bind_param("issid", $order_id, $name, $size, $qty, $price);
+        $stmt2 = $conn->prepare("INSERT INTO order_items (order_id, product_name, size, quantity, price, image) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt2->bind_param("issids", $order_id, $name, $size, $qty, $price, $img);
         $stmt2->execute();
         $stmt2->close();
 

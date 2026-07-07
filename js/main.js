@@ -52,15 +52,17 @@ const tabs = document.querySelectorAll("[data-target]"),
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     const target = document.querySelector(tab.dataset.target);
-    tabContents.forEach((tabContent) => {
-      tabContent.classList.remove("active-tab");
-    });
+    if (target) {
+      tabContents.forEach((tabContent) => {
+        tabContent.classList.remove("active-tab");
+      });
 
-    target.classList.add("active-tab");
+      target.classList.add("active-tab");
 
-    tabs.forEach((tab) => {
-      tab.classList.remove("active-tab");
-    });
-    tab.classList.add("active-tab");
+      tabs.forEach((t) => {
+        t.classList.remove("active-tab");
+      });
+      tab.classList.add("active-tab");
+    }
   });
 });

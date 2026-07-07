@@ -3,7 +3,7 @@ session_start();
 include_once dirname(__DIR__) . "/config/dbconnect.php";
 
 // ✅ Role-based restriction
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'superadmin'])) {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'super_admin', 'superadmin'])) {
     die("Unauthorized access");
 }
 

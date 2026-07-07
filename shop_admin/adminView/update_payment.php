@@ -1,9 +1,9 @@
-﻿<?php
+<?php
 session_start();
 include_once dirname(__DIR__) . "/config/dbconnect.php";
 
 // ✅ Security check (sirf admin allow)
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+if (!isset($_SESSION['is_admin_logged_in']) || $_SESSION['is_admin_logged_in'] !== true || !isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'super_admin', 'superadmin'])) {
     echo json_encode(["status" => "error", "message" => "Unauthorized"]);
     exit;
 }

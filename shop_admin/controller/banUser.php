@@ -4,7 +4,7 @@ include_once dirname(__DIR__) . "/config/dbconnect.php";
 /** @var mysqli $conn */
 
 // ✅ Check Authentication & Role
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'superadmin'])) {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'super_admin', 'superadmin'])) {
     die("Access Denied");
 }
 
@@ -21,14 +21,14 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id = (int)$_GET['id'];
 
 // Prevent admin from banning themselves or other admins unless superadmin
-if ($_SESSION['role'] !== 'superadmin') {
+if (!in_array($_SESSION['role'], ['super_admin', 'superadmin'])) {
     $checkQuery = $conn->prepare("SELECT role FROM user WHERE id = ?");
     $checkQuery->bind_param("i", $id);
     $checkQuery->execute();
     $result = $checkQuery->get_result();
     if ($result && $result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        if ($user['role'] === 'admin' || $user['role'] === 'superadmin') {
+        if ($user['role'] === 'admin' || $user['role'] === 'super_admin' || $user['role'] === 'superadmin') {
             die("You cannot ban an admin account.");
         }
     }

@@ -235,7 +235,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
   $size = $_POST['product_size'] ?? '';  // Size (if applicable)
   $image = $_POST['product_image'];
   $name = $_POST['product_name'];
-  $price = $_POST['product_price'];
+  $price_raw = $_POST['product_price'] ?? 0;
+  if (is_string($price_raw)) {
+      $price_raw = preg_replace('/[^\d.]/', '', $price_raw);
+  }
+  $price = (float)$price_raw;
   $sku_no = $_POST['sku_no'];
 
   if ($userLoggedIn) {

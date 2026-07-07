@@ -27,8 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (password_verify($password, $row['password'])) {
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
-                $_SESSION['role'] = $row['role'];
+                $_SESSION['role'] = 'user'; // Strictly enforce end-user role
                 $_SESSION['username'] = $row['email'];
+                unset($_SESSION['is_admin_logged_in']);
 
                 // Merge cart logic...
                 if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
@@ -51,11 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     unset($_SESSION['cart']);
                 }
 
-                if ($row['role'] == 'admin') {
-                    header("Location: admin/index.php");
-                } else {
-                    header("Location: index.php");
-                }
+                header("Location: index.php");
                 exit();
             } else {
                 $error_msg = "Invalid password!";

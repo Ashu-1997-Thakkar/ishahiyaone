@@ -7,7 +7,7 @@ $error = '';
 $success = '';
 
 if (isset($_GET['registered']) && $_GET['registered'] == 1 && isset($_SESSION['signup_success'])) {
-    $success = "✅ Registration successful! You can now login.";
+    $success = "✅ Sign Up successful! Your account is PENDING Super Admin approval. You can login once permission is granted.";
     unset($_SESSION['signup_success']);
 }
 
@@ -18,7 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = trim($_POST['username']);
         $password1 = $_POST['password'];
 
-        $stmt = $conn->prepare("SELECT id, username, password, role FROM admin WHERE username = ?");
+        // Ensure status column exists in admin table
+        $colCheck = $conn->query("SHOW COLUMNS FROM admin LIKE 'status'");
+        if ($colCheck && $colCheck->num_rows === 0) {
+            $conn->query("ALTER TABLE admin ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'approved'");
+        }
+
+        $stmt = $conn->prepare("SELECT id, username, password, role, COALESCE(status, 'approved') as status FROM admin WHERE username = ?");
         if (!$stmt) {
             die('SQL Error: ' . $conn->error);
         }
@@ -31,12 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $row = $res->fetch_assoc();
 
             if ($password1 === $row['password']) {
-                $_SESSION['user_id'] = $row['id'];
-                $_SESSION['username'] = $row['username'];
-                $_SESSION['role'] = $row['role'];
+                if ($row['status'] === 'pending') {
+                    $error = "⏳ Access Denied: Your admin account is currently PENDING approval from the Super Admin.";
+                } elseif ($row['status'] === 'revoked' || $row['status'] === 'inactive' || $row['status'] === 'disabled') {
+                    $error = "🚫 Access Revoked: Your administrative permissions have been revoked.";
+                } else {
+                    $_SESSION['user_id'] = $row['id'];
+                    $_SESSION['username'] = $row['username'];
+                    $_SESSION['role'] = $row['role'];
+                    $_SESSION['admin_status'] = $row['status'];
+                    $_SESSION['is_admin_logged_in'] = true;
 
-                header("Location: index.php");
-                exit();
+                    header("Location: index.php");
+                    exit();
+                }
             } else {
                 $error = "⚠️ Invalid password!";
             }
@@ -62,6 +76,7 @@ ob_end_flush();
     <link rel="icon" type="image/png" sizes="16x16" href="../image/logo/ishahiya-logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
             margin: 0;
@@ -152,6 +167,34 @@ ob_end_flush();
             background: #fff;
         }
 
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-wrapper input {
+            padding-right: 45px !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            font-size: 16px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .toggle-password:hover {
+            color: #2ecc71;
+        }
+
         .btn {
             width: 100%;
             padding: 12px;
@@ -176,7 +219,6 @@ ob_end_flush();
                 flex-direction: column;
                 margin: 20px;
                 max-width: 500px;
-                /* Optimized for mobile/tablet */
             }
 
             .left-section {
@@ -211,11 +253,11 @@ ob_end_flush();
                 </div>
             <?php endif; ?>
 
-            <?php if ($error): ?>
+            <?php if ($error || (isset($_GET['error']) && $_GET['error'] === 'rbac_denied')): ?>
                 <div style="background: <?php echo strpos($error, '✅') !== false ? '#d4edda' : '#ffd2d2'; ?>; 
                             color: <?php echo strpos($error, '✅') !== false ? '#155724' : '#d8000c'; ?>; 
                             padding: 10px; margin-bottom: 15px; border-radius: 5px; font-size: 14px; width: 100%; text-align: center;">
-                    <?= htmlspecialchars($error) ?>
+                    <?= htmlspecialchars($error ?: "🛑 Access Denied: Admin authentication required to access this resource.") ?>
                 </div>
             <?php endif; ?>
 
@@ -227,15 +269,41 @@ ob_end_flush();
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="" required>
+                        <span class="toggle-password" onclick="togglePasswordVisibility('password', this)"><i class="fa-regular fa-eye"></i></span>
+                    </div>
                 </div>
                 <button type="submit" class="btn">LOGIN</button>
-                <p style="margin-top: 20px; font-size: 13px; color: #555; text-align: center;">
-                    <a href="signup.php" style="color: #27ae60; text-decoration: none; font-weight: 500;">Create an admin account</a>
-                </p>
+                <div style="margin-top: 15px; text-align: center;">
+                    <a href="forgot_password.php" style="color: #666; text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.3s;">Forgot Password?</a>
+                </div>
+                <div style="margin-top: 12px; text-align: center;">
+                    <a href="signup.php" style="color: #27ae60; text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.3s;">Create an Ishahiya Admin Account</a>
+                </div>
             </form>
         </div>
     </div>
+    <script>
+        // Clean URL hash fragments left over from admin dashboard redirects
+        if (window.location.hash) {
+            history.replaceState(null, null, window.location.pathname + window.location.search);
+        }
+
+        function togglePasswordVisibility(inputId, el) {
+            const input = document.getElementById(inputId);
+            const icon = el.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 
 </html>

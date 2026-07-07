@@ -78,7 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     $qty   = max(1, (int)($_POST['product_quantity'] ?? 1)); // minimum 1
     $image = $_POST['product_image'] ?? '';
     $name  = $_POST['product_name'] ?? '';
-    $price = $_POST['product_price'];
+    $price_raw = $_POST['product_price'] ?? 0;
+    if (is_string($price_raw)) {
+        $price_raw = preg_replace('/[^\d.]/', '', $price_raw);
+    }
+    $price = (float)$price_raw;
     $sku_no = $_POST['sku_no'] ?? '';
 
     if ($id === null) {
@@ -92,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
         if (!$stmt) die("Prepare failed: " . $conn->error);
-        $stmt->bind_param("iisissss", $user_id, $id, $size, $qty, $image, $name, $sku_no, $price);
+        $stmt->bind_param("iisisssd", $user_id, $id, $size, $qty, $image, $name, $sku_no, $price);
         if (!$stmt->execute()) die("Execute failed: " . $stmt->error);
         $stmt->close();
     } else {

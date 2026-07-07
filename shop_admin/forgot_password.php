@@ -4,49 +4,49 @@ session_start();
 require __DIR__ . '/config/dbconnect.php'; // DB connection
 
 $error = '';
+$success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
-    if ($action === 'signup') {
-        $fullName = trim($_POST['full_name']);
-        $email = trim($_POST['email']);
-        $password = $_POST['password'];
-        $confirmPassword = $_POST['confirm_password'];
-        $role = 'admin'; // default role
-        $username = $email; // use email as username
+    if ($action === 'reset_password') {
+        $identity = trim($_POST['identity'] ?? '');
+        $newPassword = $_POST['new_password'] ?? '';
+        $confirmPassword = $_POST['confirm_password'] ?? '';
 
-        if ($password !== $confirmPassword) {
-            $error = "⚠️ Passwords do not match!";
+        if (empty($identity) || empty($newPassword) || empty($confirmPassword)) {
+            $error = "⚠️ All fields are required!";
+        } elseif ($newPassword !== $confirmPassword) {
+            $error = "⚠️ New passwords do not match!";
+        } elseif (strlen($newPassword) < 4) {
+            $error = "⚠️ Password must be at least 4 characters long!";
         } else {
-            // Ensure status column exists in admin table for RBAC management
-            $colCheck = $conn->query("SHOW COLUMNS FROM admin LIKE 'status'");
-            if ($colCheck && $colCheck->num_rows === 0) {
-                $conn->query("ALTER TABLE admin ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'approved'");
-            }
-
-            // check if username/email exists
+            // Check if admin exists by username or email
             $stmt = $conn->prepare("SELECT id FROM admin WHERE username = ? OR email = ?");
-            $stmt->bind_param("ss", $username, $email);
+            if (!$stmt) {
+                die('SQL Error: ' . $conn->error);
+            }
+            $stmt->bind_param("ss", $identity, $identity);
             $stmt->execute();
             $res = $stmt->get_result();
 
             if ($res->num_rows > 0) {
-                $error = "⚠️ Email/Username already exists!";
-            } else {
-                $status = 'pending'; // RBAC: Self-registered accounts must be approved by Super Admin!
-                $stmt2 = $conn->prepare("INSERT INTO admin (full_name, email, username, password, role, status) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt2->bind_param("ssssss", $fullName, $email, $username, $password, $role, $status);
-                if ($stmt2->execute()) {
-                    $_SESSION['signup_success'] = true;
-                    header("Location: log.php?registered=1");
-                    exit();
+                $row = $res->fetch_assoc();
+                $adminId = $row['id'];
+                $stmt->close();
+
+                // Update password
+                $stmtUpdate = $conn->prepare("UPDATE admin SET password = ? WHERE id = ?");
+                $stmtUpdate->bind_param("si", $newPassword, $adminId);
+                if ($stmtUpdate->execute()) {
+                    $success = "✅ Password reset successfully! You can now login.";
                 } else {
-                    $error = "⚠️ Error signing up admin: " . $conn->error;
+                    $error = "⚠️ Error updating password: " . $conn->error;
                 }
-                $stmt2->close();
+                $stmtUpdate->close();
+            } else {
+                $error = "⚠️ No admin account found with this Username or Email!";
             }
-            $stmt->close();
         }
     }
 }
@@ -60,7 +60,7 @@ ob_end_flush();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Sign Up - Ishahiya</title>
+    <title>Admin Forgot Password - Ishahiya</title>
     <link rel="icon" type="image/png" sizes="32x32" href="../image/logo/ishahiya-logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../image/logo/ishahiya-logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -98,7 +98,7 @@ ob_end_flush();
         .right-section {
             flex: 1;
             background-color: #ffffff;
-            padding: 20px 30px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -115,7 +115,7 @@ ob_end_flush();
             font-size: 20px;
             font-weight: 700;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: center;
             letter-spacing: 0.5px;
         }
@@ -126,14 +126,14 @@ ob_end_flush();
         }
 
         .input-group {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
         .input-group label {
             display: block;
-            font-size: 12px;
-            margin-bottom: 4px;
+            font-size: 13px;
+            margin-bottom: 6px;
             color: #555;
             text-align: center;
             font-weight: 500;
@@ -141,7 +141,7 @@ ob_end_flush();
 
         .input-group input {
             width: 100%;
-            padding: 8px 20px;
+            padding: 10px 20px;
             font-size: 13px;
             background: #edf2f7;
             border: 1px solid #d2d6dc;
@@ -186,7 +186,7 @@ ob_end_flush();
 
         .btn {
             width: 100%;
-            padding: 10px;
+            padding: 11px;
             border: none;
             border-radius: 25px;
             background: #2ecc71;
@@ -229,52 +229,56 @@ ob_end_flush();
         <!-- Left Section with Image -->
         <div class="left-section"></div>
 
-        <!-- Right Section with Signup Form -->
+        <!-- Right Section with Reset Form -->
         <div class="right-section">
             <div class="logo">
                 <img src="../image/logo/ishahiya-logo.png" alt="Ishahiya Logo">
             </div>
-           
-            <h2>SIGN UP</h2>
+            <h2>RESET PASSWORD</h2>
+
+            <?php if ($success): ?>
+                <div style="background: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 5px; font-size: 13px; width: 100%; text-align: center;">
+                    <?= htmlspecialchars($success) ?>
+                    <div style="margin-top: 8px;">
+                        <a href="log.php" style="color: #155724; font-weight: bold; text-decoration: underline;">Click here to Login</a>
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <?php if ($error): ?>
-                <div style="background: <?php echo strpos($error, '✅') !== false ? '#d4edda' : '#ffd2d2'; ?>; 
-                            color: <?php echo strpos($error, '✅') !== false ? '#155724' : '#d8000c'; ?>; 
-                            padding: 10px; margin-bottom: 15px; border-radius: 5px; font-size: 14px; width: 100%; text-align: center;">
+                <div style="background: #ffd2d2; color: #d8000c; padding: 10px; margin-bottom: 15px; border-radius: 5px; font-size: 13px; width: 100%; text-align: center;">
                     <?= htmlspecialchars($error) ?>
                 </div>
             <?php endif; ?>
 
-            <form action="signup.php" method="POST">
-                <input type="hidden" name="action" value="signup">
+            <?php if (!$success): ?>
+            <form action="forgot_password.php" method="POST">
+                <input type="hidden" name="action" value="reset_password">
                 <div class="input-group">
-                    <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" placeholder="" required>
+                    <label for="identity">Registered Username or Email</label>
+                    <input type="text" id="identity" name="identity" placeholder="e.g. admin@ishahiya.com" required>
                 </div>
                 <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
+                    <label for="new_password">New Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="password" name="password" placeholder="" required>
-                        <span class="toggle-password" onclick="togglePasswordVisibility('password', this)"><i class="fa-regular fa-eye"></i></span>
+                        <input type="password" id="new_password" name="new_password" placeholder="Enter new password" required>
+                        <span class="toggle-password" onclick="togglePasswordVisibility('new_password', this)"><i class="fa-regular fa-eye"></i></span>
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="confirm_password">Confirm Password</label>
+                    <label for="confirm_password">Confirm New Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="confirm_password" name="confirm_password" placeholder="" required>
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm new password" required>
                         <span class="toggle-password" onclick="togglePasswordVisibility('confirm_password', this)"><i class="fa-regular fa-eye"></i></span>
                     </div>
                 </div>
-                <button type="submit" class="btn">SIGN UP</button>
-
-                <p style="margin-top: 20px; font-size: 13px; color: #555; text-align: center;">
-                    <a href="log.php" style="color: #27ae60; text-decoration: none; font-weight: 500;">Back to Login</a>
-                </p>
+                <button type="submit" class="btn">RESET PASSWORD</button>
             </form>
+            <?php endif; ?>
+
+            <p style="margin-top: 20px; font-size: 13px; color: #555; text-align: center;">
+                <a href="log.php" style="color: #27ae60; text-decoration: none; font-weight: 500;">Back to Login</a>
+            </p>
         </div>
     </div>
     <script>

@@ -41,6 +41,19 @@ $stmt->bind_param("is", $user_id, $user_mobile);
 $stmt->execute();
 $result = $stmt->get_result();
 while ($row = $result->fetch_assoc()) {
+    $u_id = (int)($row['user_id'] ?? 0);
+    $tot = (float)($row['total_price'] ?? 0);
+    $ord_time = $row['order_date'] ?? '';
+    $b_stmt = $conn->prepare("SELECT * FROM billing_details WHERE (user_id = ? OR mobile = ? OR alt_mobile = ?) AND ABS(total_amount - ?) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, created_at, ?)) ASC LIMIT 1");
+    if ($b_stmt) {
+        $b_stmt->bind_param("issds", $u_id, $user_mobile, $user_mobile, $tot, $ord_time);
+        $b_stmt->execute();
+        $b_res = $b_stmt->get_result();
+        if ($b_row = $b_res->fetch_assoc()) {
+            $row['billing_details'] = $b_row;
+        }
+        $b_stmt->close();
+    }
     $orders[] = $row;
 }
 $stmt->close();
@@ -243,12 +256,13 @@ $stmt->close();
                 // Fetch order items
                 $items_stmt = $conn->prepare("
                     SELECT oi.*, 
-                           COALESCE(sc.Image1, ac.Image1, p.image) AS Image1 
+                           COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image) AS Image1 
                     FROM order_items oi 
-                    LEFT JOIN subcategories sc ON oi.product_name COLLATE utf8mb4_general_ci = sc.name COLLATE utf8mb4_general_ci 
-                    LEFT JOIN all_category ac ON oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci
-                    LEFT JOIN products p ON oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci
+                    LEFT JOIN subcategories sc ON (oi.product_name COLLATE utf8mb4_general_ci = sc.name COLLATE utf8mb4_general_ci OR sc.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', sc.name COLLATE utf8mb4_general_ci, '%'))
+                    LEFT JOIN all_category ac ON (oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci OR ac.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', ac.name COLLATE utf8mb4_general_ci, '%'))
+                    LEFT JOIN products p ON (oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci OR p.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', p.name COLLATE utf8mb4_general_ci, '%'))
                     WHERE oi.order_id = ?
+                    GROUP BY oi.id
                 ");
                 $items_stmt->bind_param("i", $order_id);
                 $items_stmt->execute();
@@ -264,6 +278,8 @@ $stmt->close();
                         $imagePath = 'shop_admin/' . $img;
                     } elseif (file_exists(__DIR__ . '/shop_admin/uploads/subshop/' . basename($img))) {
                         $imagePath = 'shop_admin/uploads/subshop/' . basename($img);
+                    } elseif (file_exists(__DIR__ . '/shop_admin/uploads/' . basename($img))) {
+                        $imagePath = 'shop_admin/uploads/' . basename($img);
                     }
                 ?>
                 <div class="item-row">
@@ -286,7 +302,12 @@ $stmt->close();
             
             <div class="order-footer">
                 <div class="order-summary">
-                    <strong>Payment:</strong> <?= htmlspecialchars($order['payment_mode'] ?? 'COD') ?><br>
+                    <?php
+                    $pay_mode = $order['billing_details']['Mode'] ?? $order['payment_mode'] ?? 'COD';
+                    if ($pay_mode === '0' || $pay_mode === 0 || empty($pay_mode)) $pay_mode = 'COD';
+                    elseif ($pay_mode === '1' || $pay_mode === 1) $pay_mode = 'Online Pay (Razorpay)';
+                    ?>
+                    <strong>Payment:</strong> <?= htmlspecialchars($pay_mode) ?><br>
                     <?php if (isset($order['gst_amount']) && $order['gst_amount'] > 0): ?>
                     <strong>GST:</strong> ₹<?= number_format($order['gst_amount'], 2) ?><br>
                     <?php endif; ?>

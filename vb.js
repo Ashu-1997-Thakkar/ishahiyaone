@@ -13,26 +13,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to show one section and hide others
   function showCategory(category) {
-    menClothing.classList.remove("visible");
-    womenClothing.classList.remove("visible");
-    kidsClothing.classList.remove("visible");
-    coupleClothing.classList.remove("visible");
+    if (menClothing) menClothing.classList.remove("visible");
+    if (womenClothing) womenClothing.classList.remove("visible");
+    if (kidsClothing) kidsClothing.classList.remove("visible");
+    if (coupleClothing) coupleClothing.classList.remove("visible");
 
-    menBtn.classList.remove("active");
-    womenBtn.classList.remove("active");
-    kidsBtn.classList.remove("active");
-    coupleBtn.classList.remove("active");
+    if (menBtn) menBtn.classList.remove("active");
+    if (womenBtn) womenBtn.classList.remove("active");
+    if (kidsBtn) kidsBtn.classList.remove("active");
+    if (coupleBtn) coupleBtn.classList.remove("active");
 
-    if (category === "men") {
+    if (category === "men" && menClothing && menBtn) {
       menClothing.classList.add("visible");
       menBtn.classList.add("active");
-    } else if (category === "women") {
+    } else if (category === "women" && womenClothing && womenBtn) {
       womenClothing.classList.add("visible");
       womenBtn.classList.add("active");
-    } else if (category === "kids") {
+    } else if (category === "kids" && kidsClothing && kidsBtn) {
       kidsClothing.classList.add("visible");
       kidsBtn.classList.add("active");
-    } else if (category === "couple") {
+    } else if (category === "couple" && coupleClothing && coupleBtn) {
       coupleClothing.classList.add("visible");
       coupleBtn.classList.add("active");
     }
@@ -45,5 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (coupleBtn) coupleBtn.addEventListener("click", () => showCategory("couple"));
 
   // Show default category
-  showCategory("men");
+  if (menBtn || womenBtn || kidsBtn || coupleBtn) {
+    showCategory("men");
+  }
 });

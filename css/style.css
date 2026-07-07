@@ -1298,7 +1298,7 @@ img {
     min-height: 56px !important;
     width: 100% !important;
     max-width: 100vw !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     box-sizing: border-box !important;
     padding: 0 !important;
     display: flex !important;
@@ -1309,7 +1309,7 @@ img {
     height: 100% !important;
     width: 100% !important;
     max-width: 100vw !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     display: flex !important;
     align-items: center !important;
   }
@@ -1359,12 +1359,13 @@ img {
   }
 
   .dropdown-menu {
-    position: fixed !important;
-    top: 107px !important; /* Right below category bar */
+    position: absolute !important;
+    top: 100% !important; /* Right below category pill */
     left: 0 !important;
-    right: 0 !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
+    right: auto !important;
+    width: max-content !important;
+    min-width: 220px !important;
+    max-width: 85vw !important;
     transform: none !important; /* CRITICAL FIX: Removes desktop translateX(-50%) that cut off left text */
     background: #ffffff;
     max-height: 0;
@@ -1383,7 +1384,7 @@ img {
   }
 
   .swiper-slide.dropdown.active .dropdown-menu {
-    max-height: calc(85dvh - 110px);
+    max-height: 450px;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;

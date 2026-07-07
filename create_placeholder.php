@@ -24,6 +24,9 @@ imagestring($img, 5, $cx - 38, $cy + 30, 'No Image', $textColor);
 $paths = [
     __DIR__ . '/shop_admin/uploads/no-image.png',
     __DIR__ . '/assets/no-image.png',
+    __DIR__ . '/uploads/no-image.png',
+    __DIR__ . '/image/no-image.png',
+    __DIR__ . '/shop_admin/assets/no-image.png',
 ];
 
 foreach ($paths as $path) {

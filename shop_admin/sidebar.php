@@ -21,6 +21,9 @@
       <a href="javascript:void(0)" onclick="loadModule('mobile-clients')"><i class="fa fa-mobile-alt"></i> Mobile Clients</a>
       <a href="javascript:void(0)" onclick="loadModule('messages')"><i class="fa fa-envelope"></i> Messages</a>
       <a href="javascript:void(0)" onclick="loadModule('inquiries')"><i class="fa fa-question-circle"></i> Inquiries</a>
+      <?php if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['super_admin', 'superadmin'])): ?>
+      <a href="javascript:void(0)" onclick="loadModule('manage-admins')"><i class="fa fa-user-shield"></i> Manage Admins</a>
+      <?php endif; ?>
     </div>
 
     <!-- Section: Inventory & Categories -->
@@ -73,9 +76,7 @@
   </div>
 </div>
 
-<button class="openbtn" id="sidebarToggle" onclick="toggleSidebar()">
-  <i class="fa fa-bars"></i>
-</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <script>
   function toggleSection(label, menuId) {
@@ -86,16 +87,29 @@
 
   function toggleSidebar() {
     const sidebar = document.getElementById("mySidebar");
+    const overlay = document.getElementById("sidebarOverlay");
     const main = document.getElementById("main-content");
     const isMobile = window.innerWidth <= 992;
 
-    if (sidebar.style.width === "260px") {
-      sidebar.style.width = "0";
-      if (!isMobile) main.style.marginLeft = "0";
+    if (isMobile) {
+      sidebar.classList.toggle("mobile-open");
+      if (overlay) overlay.classList.toggle("active");
     } else {
-      sidebar.style.width = "260px";
-      if (!isMobile) main.style.marginLeft = "260px";
+      if (sidebar.style.width === "0px" || sidebar.style.width === "0") {
+        sidebar.style.width = "260px";
+        main.style.marginLeft = "260px";
+      } else {
+        sidebar.style.width = "0";
+        main.style.marginLeft = "0";
+      }
     }
+  }
+
+  function closeSidebar() {
+    const sidebar = document.getElementById("mySidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+    if (sidebar) sidebar.classList.remove("mobile-open");
+    if (overlay) overlay.classList.remove("active");
   }
 
   document.addEventListener("DOMContentLoaded", function() {
@@ -103,6 +117,9 @@
     if (!isMobile) {
       document.getElementById("mySidebar").style.width = "260px";
       document.getElementById("main-content").style.marginLeft = "260px";
+    } else {
+      document.getElementById("mySidebar").style.width = "";
+      document.getElementById("main-content").style.marginLeft = "";
     }
 
     const menuLinks = document.querySelectorAll('.menu-items a');
@@ -110,8 +127,9 @@
       link.addEventListener('click', function() {
         menuLinks.forEach(l => l.classList.remove('active'));
         this.classList.add('active');
-        // Don't auto-close sidebar on desktop
-        if (window.innerWidth <= 992) toggleSidebar();
+        if (window.innerWidth <= 992) {
+          closeSidebar();
+        }
       });
     });
   });

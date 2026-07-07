@@ -408,14 +408,19 @@ $admin_message = "New Order Alert!\n"
     
             foreach ($cart_items as $item) {
                 $qty    = $item['quantity'];
-                $price = $item['price'];
+                $price_raw = $item['price'] ?? 0;
+                if (is_string($price_raw)) {
+                    $price_raw = preg_replace('/[^\d.]/', '', $price_raw);
+                }
+                $price = (float)$price_raw;
                 $name  = $item['name'];
                 $size  = $item['size'];
+                $img   = $item['images1'] ?? '';
     
                 $stmt2 = $conn->prepare("INSERT INTO order_items 
-                    (order_id, product_name, size, quantity, price) 
-                    VALUES (?, ?, ?, ?, ?)");
-                $stmt2->bind_param("issid", $order_id, $name, $size, $qty, $price);
+                    (order_id, product_name, size, quantity, price, image) 
+                    VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt2->bind_param("issids", $order_id, $name, $size, $qty, $price, $img);
                 $stmt2->execute();
                 $stmt2->close();
 

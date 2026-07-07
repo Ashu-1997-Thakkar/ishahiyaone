@@ -34,6 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
                 $order_data = $row;
+                // Fetch associated billing details for human-readable mode and address
+                $u_id = (int)($order_data['user_id'] ?? 0);
+                $tot = (float)($order_data['total_price'] ?? 0);
+                $ord_time = $order_data['order_date'] ?? '';
+                $b_stmt = $conn->prepare("SELECT * FROM billing_details WHERE (user_id = ? OR mobile = ? OR alt_mobile = ?) AND ABS(total_amount - ?) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, created_at, ?)) ASC LIMIT 1");
+                if ($b_stmt) {
+                    $b_stmt->bind_param("issds", $u_id, $phone, $phone, $tot, $ord_time);
+                    $b_stmt->execute();
+                    $b_res = $b_stmt->get_result();
+                    if ($b_row = $b_res->fetch_assoc()) {
+                        $order_data['billing_details'] = $b_row;
+                    }
+                    $b_stmt->close();
+                }
             } else {
                 $error_msg = "No order found with the provided Order ID and Phone Number.";
             }
@@ -330,12 +344,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
                 <?php
                 $items_stmt = $conn->prepare("
                     SELECT oi.*, 
-                           COALESCE(sc.Image1, ac.Image1, p.image) AS Image1 
+                           COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image) AS Image1 
                     FROM order_items oi 
-                    LEFT JOIN subcategories sc ON oi.product_name COLLATE utf8mb4_general_ci = sc.name COLLATE utf8mb4_general_ci 
-                    LEFT JOIN all_category ac ON oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci
-                    LEFT JOIN products p ON oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci
+                    LEFT JOIN subcategories sc ON (oi.product_name COLLATE utf8mb4_general_ci = sc.name COLLATE utf8mb4_general_ci OR sc.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', sc.name COLLATE utf8mb4_general_ci, '%'))
+                    LEFT JOIN all_category ac ON (oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci OR ac.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', ac.name COLLATE utf8mb4_general_ci, '%'))
+                    LEFT JOIN products p ON (oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci OR p.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', p.name COLLATE utf8mb4_general_ci, '%'))
                     WHERE oi.order_id = ?
+                    GROUP BY oi.id
                 ");
                 $items_stmt->bind_param("i", $order_data['id']);
                 $items_stmt->execute();
@@ -350,6 +365,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
                         $imagePath = 'shop_admin/' . $img;
                     } elseif (file_exists(__DIR__ . '/shop_admin/uploads/subshop/' . basename($img))) {
                         $imagePath = 'shop_admin/uploads/subshop/' . basename($img);
+                    } elseif (file_exists(__DIR__ . '/shop_admin/uploads/' . basename($img))) {
+                        $imagePath = 'shop_admin/uploads/' . basename($img);
                     }
                 ?>
                 <div class="item-row">
@@ -372,8 +389,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
             
             <div class="order-header" style="border-top: 1px solid var(--border-color); border-bottom: none; background: #0a0a0a;">
                 <div style="font-size: 0.9rem; color: #ccc;">
-                    <strong>Payment Mode:</strong> <?= htmlspecialchars($order_data['payment_mode'] ?? 'COD') ?><br>
-                    <strong>Shipping Address:</strong> <?= htmlspecialchars($order_data['Address'] ?? '') ?>, <?= htmlspecialchars($order_data['City'] ?? '') ?><br>
+                    <?php
+                    $pay_mode = $order_data['billing_details']['Mode'] ?? $order_data['payment_mode'] ?? 'COD';
+                    if ($pay_mode === '0' || $pay_mode === 0 || empty($pay_mode)) $pay_mode = 'COD';
+                    elseif ($pay_mode === '1' || $pay_mode === 1) $pay_mode = 'Online Pay (Razorpay)';
+                    
+                    $addr = $order_data['billing_details']['address'] ?? $order_data['address'] ?? $order_data['Address'] ?? '';
+                    $city = $order_data['billing_details']['city'] ?? $order_data['City'] ?? '';
+                    $state = $order_data['billing_details']['state'] ?? '';
+                    $pincode = $order_data['billing_details']['pincode'] ?? '';
+                    
+                    $full_addr = trim(implode(', ', array_filter([$addr, $city, $state, $pincode])));
+                    if (empty($full_addr)) $full_addr = 'Address not provided';
+                    ?>
+                    <strong>Payment Mode:</strong> <?= htmlspecialchars($pay_mode) ?><br>
+                    <strong>Shipping Address:</strong> <?= htmlspecialchars($full_addr) ?><br>
                 </div>
                 <div style="font-size: 1.2rem; font-weight: 700; color: var(--gold);">
                     Total: ₹<?= number_format($order_data['total_price'], 2) ?>

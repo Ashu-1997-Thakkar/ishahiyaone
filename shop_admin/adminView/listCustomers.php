@@ -12,7 +12,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'delete' && isset($_POST['id'
         exit;
     }
 
-    $deleteQuery = "DELETE FROM Customer WHERE id = $id";
+    $deleteQuery = "DELETE FROM customer WHERE id = $id";
     if (mysqli_query($conn, $deleteQuery)) {
         echo json_encode(['success' => 'Customer deleted successfully!']);
     } else {
@@ -27,11 +27,11 @@ $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] :
 $offset = ($page - 1) * $limit;
 
 // Count total
-$totalRes = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Customer");
+$totalRes = mysqli_query($conn, "SELECT COUNT(*) AS total FROM customer");
 $totalRows = mysqli_fetch_assoc($totalRes)['total'];
 
 // Fetch records
-$query = "SELECT * FROM Customer ORDER BY id DESC LIMIT $limit OFFSET $offset";
+$query = "SELECT * FROM customer ORDER BY id DESC LIMIT $limit OFFSET $offset";
 $result = mysqli_query($conn, $query);
 $count = $offset + 1;
 ?>
