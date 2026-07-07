@@ -344,11 +344,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
                 <?php
                 $items_stmt = $conn->prepare("
                     SELECT oi.*, 
-                           COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image) AS Image1 
+                           COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image, bo.banner_image) AS Image1 
                     FROM order_items oi 
                     LEFT JOIN subcategories sc ON (oi.product_name COLLATE utf8mb4_general_ci = sc.name COLLATE utf8mb4_general_ci OR sc.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', sc.name COLLATE utf8mb4_general_ci, '%'))
                     LEFT JOIN all_category ac ON (oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci OR ac.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', ac.name COLLATE utf8mb4_general_ci, '%'))
                     LEFT JOIN products p ON (oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci OR p.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', p.name COLLATE utf8mb4_general_ci, '%'))
+                    LEFT JOIN bumper_offers bo ON (oi.product_name COLLATE utf8mb4_general_ci = bo.title COLLATE utf8mb4_general_ci OR bo.title COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', bo.title COLLATE utf8mb4_general_ci, '%'))
                     WHERE oi.order_id = ?
                     GROUP BY oi.id
                 ");
@@ -359,14 +360,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
                 while ($item = $items_result->fetch_assoc()):
                     $img = !empty($item['Image1']) ? $item['Image1'] : 'uploads/no-image.png';
                     $imagePath = 'uploads/no-image.png';
-                    if (file_exists(__DIR__ . '/' . $img)) {
-                        $imagePath = $img;
-                    } elseif (file_exists(__DIR__ . '/shop_admin/' . $img)) {
-                        $imagePath = 'shop_admin/' . $img;
-                    } elseif (file_exists(__DIR__ . '/shop_admin/uploads/subshop/' . basename($img))) {
-                        $imagePath = 'shop_admin/uploads/subshop/' . basename($img);
-                    } elseif (file_exists(__DIR__ . '/shop_admin/uploads/' . basename($img))) {
-                        $imagePath = 'shop_admin/uploads/' . basename($img);
+                    if (!empty($img) && $img !== 'uploads/no-image.png') {
+                        if (file_exists(__DIR__ . '/' . $img)) {
+                            $imagePath = $img;
+                        } elseif (file_exists(__DIR__ . '/shop_admin/' . $img)) {
+                            $imagePath = 'shop_admin/' . $img;
+                        } elseif (file_exists(__DIR__ . '/shop_admin/uploads/subshop/' . basename($img))) {
+                            $imagePath = 'shop_admin/uploads/subshop/' . basename($img);
+                        } elseif (file_exists(__DIR__ . '/shop_admin/uploads/' . basename($img))) {
+                            $imagePath = 'shop_admin/uploads/' . basename($img);
+                        } else {
+                            // Web URL fallback for Linux hosting environments
+                            $imagePath = (strpos($img, 'shop_admin/') !== false || strpos($img, 'uploads/') !== false) ? $img : 'shop_admin/uploads/subshop/' . basename($img);
+                        }
                     }
                 ?>
                 <div class="item-row">

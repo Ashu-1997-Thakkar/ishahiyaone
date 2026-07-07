@@ -21,7 +21,7 @@
             // Query to retrieve data from the order_item table
             $sql = "
               SELECT 
-                COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image, 'no-image.png') AS product_image, 
+                COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image, bo.banner_image, 'no-image.png') AS product_image, 
                 oi.product_name, 
                 oi.size, 
                 oi.quantity, 
@@ -30,6 +30,7 @@
               LEFT JOIN subcategories sc ON (oi.product_name COLLATE utf8mb4_general_ci = sc.name COLLATE utf8mb4_general_ci OR sc.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', sc.name COLLATE utf8mb4_general_ci, '%'))
               LEFT JOIN all_category ac ON (oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci OR ac.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', ac.name COLLATE utf8mb4_general_ci, '%'))
               LEFT JOIN products p ON (oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci OR p.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', p.name COLLATE utf8mb4_general_ci, '%'))
+              LEFT JOIN bumper_offers bo ON (oi.product_name COLLATE utf8mb4_general_ci = bo.title COLLATE utf8mb4_general_ci OR bo.title COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', bo.title COLLATE utf8mb4_general_ci, '%'))
               WHERE oi.order_id = $orderID
               GROUP BY oi.id
             ";
@@ -44,14 +45,19 @@
                     // Construct full image URL
                     $img = $row["product_image"];
                     $imageURL = "../assets/no-image.png";
-                    if (file_exists(__DIR__ . "/../" . $img)) {
-                        $imageURL = "../" . $img;
-                    } elseif (file_exists(__DIR__ . "/../shop_admin/" . $img)) {
-                        $imageURL = "../shop_admin/" . $img;
-                    } elseif (file_exists(__DIR__ . "/../shop_admin/uploads/subshop/" . basename($img))) {
-                        $imageURL = "../shop_admin/uploads/subshop/" . basename($img);
-                    } elseif (file_exists(__DIR__ . "/../shop_admin/uploads/" . basename($img))) {
-                        $imageURL = "../shop_admin/uploads/" . basename($img);
+                    if (!empty($img) && $img !== 'no-image.png' && $img !== 'uploads/no-image.png') {
+                        if (file_exists(__DIR__ . "/../" . $img)) {
+                            $imageURL = "../" . $img;
+                        } elseif (file_exists(__DIR__ . "/../shop_admin/" . $img)) {
+                            $imageURL = "../shop_admin/" . $img;
+                        } elseif (file_exists(__DIR__ . "/../shop_admin/uploads/subshop/" . basename($img))) {
+                            $imageURL = "../shop_admin/uploads/subshop/" . basename($img);
+                        } elseif (file_exists(__DIR__ . "/../shop_admin/uploads/" . basename($img))) {
+                            $imageURL = "../shop_admin/uploads/" . basename($img);
+                        } else {
+                            // Web URL fallback for Linux hosting environments
+                            $imageURL = (strpos($img, 'shop_admin/') !== false || strpos($img, 'uploads/') !== false) ? "../" . $img : "../uploads/subshop/" . basename($img);
+                        }
                     }
       ?>
                     <tr>
