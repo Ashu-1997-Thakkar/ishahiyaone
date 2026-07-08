@@ -141,19 +141,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ── Mobile & Tablet touch dropdown toggle ──────────────────────────────────
+  // ── Mobile & Tablet touch dropdown toggle & Arrow toggle ──────────────────────────────────
   document.querySelectorAll('.swiper-slide.dropdown > a').forEach(function(link) {
     link.addEventListener('click', function(e) {
-      if (window.innerWidth > 1024 && !('ontouchstart' in window)) return; // desktop mouse: let CSS :hover handle it
+      var isArrowClick = e.target.classList && (e.target.classList.contains('arrow-down') || e.target.closest('.arrow-down'));
+      var isMobileOrTouch = window.innerWidth <= 1024 || ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
-      var slide = this.parentElement;
-      var wasActive = slide.classList.contains('active');
-      // Close all open dropdowns first
-      document.querySelectorAll('.swiper-slide.dropdown.active')
-              .forEach(function(el) { el.classList.remove('active'); });
-      if (!wasActive) {
+      if (isArrowClick || isMobileOrTouch) {
         e.preventDefault();
-        slide.classList.add('active');
+        var slide = this.parentElement;
+        var wasActive = slide.classList.contains('active');
+        
+        // Close all open dropdowns first
+        document.querySelectorAll('.swiper-slide.dropdown.active')
+                .forEach(function(el) { el.classList.remove('active'); });
+                
+        if (!wasActive) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
       }
     });
   });
