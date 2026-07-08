@@ -19,10 +19,10 @@
 
         if ($orderID > 0) {
             $linked_order_id = $orderID;
-            $b_chk = $conn->query("SELECT id, order_id, product_name, total_amount FROM billing_details WHERE id = $orderID OR order_id = $orderID LIMIT 1");
+            $b_chk = $conn->query("SELECT id, product_name, total_amount FROM billing_details WHERE id = $orderID LIMIT 1");
             $b_row_direct = ($b_chk) ? $b_chk->fetch_assoc() : null;
-            if ($b_row_direct && !empty($b_row_direct['order_id']) && $b_row_direct['order_id'] > 0) {
-                $linked_order_id = (int)$b_row_direct['order_id'];
+            if ($b_row_direct) {
+                $linked_order_id = (int)$b_row_direct['id'];
             }
             
             // Query to retrieve data from the order_item table

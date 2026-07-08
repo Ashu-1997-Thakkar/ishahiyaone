@@ -31,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
         
         // 1. Try checking billing_details first (since Order ID sent in SMS / displayed on admin payment table is billing_details.id)
         $b_row = null;
-        $b_stmt = $conn->prepare("SELECT * FROM billing_details WHERE (id = ? OR order_id = ? OR RefNo = ?) AND (mobile = ? OR alt_mobile = ? OR mobile LIKE CONCAT('%', ?, '%') OR alt_mobile LIKE CONCAT('%', ?, '%')) LIMIT 1");
+        $b_stmt = $conn->prepare("SELECT * FROM billing_details WHERE (id = ? OR RefNo = ? OR TXNID = ?) AND (mobile = ? OR alt_mobile = ? OR mobile LIKE CONCAT('%', ?, '%') OR alt_mobile LIKE CONCAT('%', ?, '%')) LIMIT 1");
         if ($b_stmt) {
             $ord_int = (int)$order_id_clean;
-            $b_stmt->bind_param("iisssss", $ord_int, $ord_int, $order_id_clean, $phone_clean, $phone_clean, $phone_clean, $phone_clean);
+            $b_stmt->bind_param("issssss", $ord_int, $order_id_clean, $order_id_clean, $phone_clean, $phone_clean, $phone_clean, $phone_clean);
             $b_stmt->execute();
             $b_res = $b_stmt->get_result();
             if ($row_b = $b_res->fetch_assoc()) {
@@ -45,10 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
         
         // 2. Look up orders table record
         $o_row = null;
-        if ($b_row && !empty($b_row['order_id'])) {
+        if ($b_row) {
             $o_stmt = $conn->prepare("SELECT * FROM orders WHERE id = ? LIMIT 1");
             if ($o_stmt) {
-                $ord_id_val = (int)$b_row['order_id'];
+                $ord_id_val = (int)$b_row['id'];
                 $o_stmt->bind_param("i", $ord_id_val);
                 $o_stmt->execute();
                 if ($row_o = $o_stmt->get_result()->fetch_assoc()) {
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
         } elseif ($b_row) {
             // Construct order_data directly from billing_details if orders table row missing/unlinked
             $order_data = [
-                'id' => !empty($b_row['order_id']) ? (int)$b_row['order_id'] : (int)$b_row['id'],
+                'id' => (int)$b_row['id'],
                 'display_order_id' => $b_row['id'],
                 'user_id' => $b_row['user_id'],
                 'customer_name' => $b_row['fullname'],
