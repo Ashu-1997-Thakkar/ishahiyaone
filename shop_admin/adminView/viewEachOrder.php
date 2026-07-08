@@ -18,6 +18,13 @@
         $orderID = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
         if ($orderID > 0) {
+            $linked_order_id = $orderID;
+            $b_chk = $conn->query("SELECT id, order_id, product_name, total_amount FROM billing_details WHERE id = $orderID OR order_id = $orderID LIMIT 1");
+            $b_row_direct = ($b_chk) ? $b_chk->fetch_assoc() : null;
+            if ($b_row_direct && !empty($b_row_direct['order_id']) && $b_row_direct['order_id'] > 0) {
+                $linked_order_id = (int)$b_row_direct['order_id'];
+            }
+            
             // Query to retrieve data from the order_item table
             $sql = "
               SELECT 
@@ -31,7 +38,7 @@
               LEFT JOIN all_category ac ON (oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci OR ac.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', ac.name COLLATE utf8mb4_general_ci, '%'))
               LEFT JOIN products p ON (oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci OR p.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', p.name COLLATE utf8mb4_general_ci, '%'))
               LEFT JOIN bumper_offers bo ON (oi.product_name COLLATE utf8mb4_general_ci = bo.title COLLATE utf8mb4_general_ci OR bo.title COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', bo.title COLLATE utf8mb4_general_ci, '%'))
-              WHERE oi.order_id = $orderID
+              WHERE oi.order_id IN ($linked_order_id, $orderID)
               GROUP BY oi.id
             ";
 
@@ -40,44 +47,49 @@
             
             // Self-healing fallback if order_items is empty for this order
             if ($result && $result->num_rows === 0) {
-                $ord_q = $conn->query("SELECT * FROM orders WHERE id = $orderID LIMIT 1");
-                if ($ord_q && $ord_row = $ord_q->fetch_assoc()) {
-                    $u_id = (int)($ord_row['user_id'] ?? 0);
-                    $tot = (float)($ord_row['total_price'] ?? 0);
-                    $phone = $conn->real_escape_string($ord_row['Contact'] ?? '');
-                    $ord_time = $conn->real_escape_string($ord_row['order_date'] ?? '');
-                    $b_q = $conn->query("SELECT * FROM billing_details WHERE (user_id = $u_id OR mobile = '$phone' OR alt_mobile = '$phone') AND ABS(total_amount - $tot) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, created_at, '$ord_time')) ASC LIMIT 1");
-                    if ($b_q && $b_row = $b_q->fetch_assoc()) {
-                        if (!empty($b_row['product_name'])) {
-                            $prod_names = explode(',', $b_row['product_name']);
-                            foreach ($prod_names as $p_name) {
-                                $p_name = trim($p_name);
-                                if (empty($p_name)) continue;
-                                $p_safe = $conn->real_escape_string($p_name);
-                                $l_q = $conn->query("
-                                    SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, size FROM subcategories WHERE name LIKE '%$p_safe%'
-                                    UNION ALL
-                                    SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, '' AS size FROM all_category WHERE name LIKE '%$p_safe%'
-                                    UNION ALL
-                                    SELECT name, price, COALESCE(NULLIF(image, ''), 'uploads/no-image.png') AS img, '' AS size FROM products WHERE name LIKE '%$p_safe%'
-                                    UNION ALL
-                                    SELECT title AS name, 0 AS price, COALESCE(NULLIF(banner_image, ''), 'uploads/no-image.png') AS img, '' AS size FROM bumper_offers WHERE title LIKE '%$p_safe%'
-                                    LIMIT 1
-                                ");
-                                $l_res = ($l_q) ? $l_q->fetch_assoc() : null;
-                                $ins_name = $conn->real_escape_string($l_res['name'] ?? $p_name);
-                                $ins_price = (float)($l_res['price'] ?? 0);
-                                if ($ins_price == 0 && $tot > 0) {
-                                    $ins_price = $tot / max(1, count($prod_names));
-                                }
-                                $ins_img = $conn->real_escape_string($l_res['img'] ?? '');
-                                $ins_size = $conn->real_escape_string($l_res['size'] ?? '');
-                                
-                                $conn->query("INSERT INTO order_items (order_id, product_name, size, quantity, price, image) VALUES ($orderID, '$ins_name', '$ins_size', 1, $ins_price, '$ins_img')");
-                            }
-                            $result = $conn->query($sql);
-                        }
+                $b_row = $b_row_direct;
+                if (!$b_row) {
+                    $ord_q = $conn->query("SELECT * FROM orders WHERE id = $orderID LIMIT 1");
+                    if ($ord_q && $ord_row = $ord_q->fetch_assoc()) {
+                        $u_id = (int)($ord_row['user_id'] ?? 0);
+                        $tot = (float)($ord_row['total_price'] ?? 0);
+                        $phone = $conn->real_escape_string($ord_row['Contact'] ?? '');
+                        $ord_time = $conn->real_escape_string($ord_row['order_date'] ?? '');
+                        $b_q = $conn->query("SELECT * FROM billing_details WHERE (user_id = $u_id OR mobile = '$phone' OR alt_mobile = '$phone') AND ABS(total_amount - $tot) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, created_at, '$ord_time')) ASC LIMIT 1");
+                        if ($b_q) $b_row = $b_q->fetch_assoc();
                     }
+                }
+                
+                if ($b_row && !empty($b_row['product_name'])) {
+                    $prod_names = explode(',', $b_row['product_name']);
+                    $tot = (float)($b_row['total_amount'] ?? 0);
+                    $ins_id = $linked_order_id > 0 ? $linked_order_id : $orderID;
+                    foreach ($prod_names as $p_name) {
+                        $p_name = trim($p_name);
+                        if (empty($p_name)) continue;
+                        $p_safe = $conn->real_escape_string($p_name);
+                        $l_q = $conn->query("
+                            SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, size FROM subcategories WHERE name LIKE '%$p_safe%'
+                            UNION ALL
+                            SELECT name, price, COALESCE(NULLIF(Image1, ''), 'uploads/no-image.png') AS img, '' AS size FROM all_category WHERE name LIKE '%$p_safe%'
+                            UNION ALL
+                            SELECT name, price, COALESCE(NULLIF(image, ''), 'uploads/no-image.png') AS img, '' AS size FROM products WHERE name LIKE '%$p_safe%'
+                            UNION ALL
+                            SELECT title AS name, 0 AS price, COALESCE(NULLIF(banner_image, ''), 'uploads/no-image.png') AS img, '' AS size FROM bumper_offers WHERE title LIKE '%$p_safe%'
+                            LIMIT 1
+                        ");
+                        $l_res = ($l_q) ? $l_q->fetch_assoc() : null;
+                        $ins_name = $conn->real_escape_string($l_res['name'] ?? $p_name);
+                        $ins_price = (float)($l_res['price'] ?? 0);
+                        if ($ins_price == 0 && $tot > 0) {
+                            $ins_price = $tot / max(1, count($prod_names));
+                        }
+                        $ins_img = $conn->real_escape_string($l_res['img'] ?? '');
+                        $ins_size = $conn->real_escape_string($l_res['size'] ?? '');
+                        
+                        $conn->query("INSERT INTO order_items (order_id, product_name, size, quantity, price, image) VALUES ($ins_id, '$ins_name', '$ins_size', 1, $ins_price, '$ins_img')");
+                    }
+                    $result = $conn->query($sql);
                 }
             }
             

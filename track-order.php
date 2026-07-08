@@ -25,33 +25,106 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
 
     if (!empty($order_id) && !empty($phone)) {
         // Remove '#' if user typed it
-        $order_id = str_replace('#', '', $order_id);
+        $order_id_clean = trim(str_replace('#', '', $order_id));
+        $phone_clean = trim(preg_replace('/[^\d]/', '', $phone));
+        if (empty($phone_clean)) $phone_clean = trim($phone);
         
-        $stmt = $conn->prepare("SELECT * FROM orders WHERE id = ? AND Contact = ?");
-        if ($stmt) {
-            $stmt->bind_param("is", $order_id, $phone);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($row = $result->fetch_assoc()) {
-                $order_data = $row;
-                // Fetch associated billing details for human-readable mode and address
+        // 1. Try checking billing_details first (since Order ID sent in SMS / displayed on admin payment table is billing_details.id)
+        $b_row = null;
+        $b_stmt = $conn->prepare("SELECT * FROM billing_details WHERE (id = ? OR order_id = ? OR RefNo = ?) AND (mobile = ? OR alt_mobile = ? OR mobile LIKE CONCAT('%', ?, '%') OR alt_mobile LIKE CONCAT('%', ?, '%')) LIMIT 1");
+        if ($b_stmt) {
+            $ord_int = (int)$order_id_clean;
+            $b_stmt->bind_param("iisssss", $ord_int, $ord_int, $order_id_clean, $phone_clean, $phone_clean, $phone_clean, $phone_clean);
+            $b_stmt->execute();
+            $b_res = $b_stmt->get_result();
+            if ($row_b = $b_res->fetch_assoc()) {
+                $b_row = $row_b;
+            }
+            $b_stmt->close();
+        }
+        
+        // 2. Look up orders table record
+        $o_row = null;
+        if ($b_row && !empty($b_row['order_id'])) {
+            $o_stmt = $conn->prepare("SELECT * FROM orders WHERE id = ? LIMIT 1");
+            if ($o_stmt) {
+                $ord_id_val = (int)$b_row['order_id'];
+                $o_stmt->bind_param("i", $ord_id_val);
+                $o_stmt->execute();
+                if ($row_o = $o_stmt->get_result()->fetch_assoc()) {
+                    $o_row = $row_o;
+                }
+                $o_stmt->close();
+            }
+        }
+        if (!$o_row) {
+            $ord_int = (int)$order_id_clean;
+            $o_stmt = $conn->prepare("SELECT * FROM orders WHERE id = ? AND (Contact = ? OR Contact LIKE CONCAT('%', ?, '%')) LIMIT 1");
+            if ($o_stmt) {
+                $o_stmt->bind_param("iss", $ord_int, $phone_clean, $phone_clean);
+                $o_stmt->execute();
+                if ($row_o = $o_stmt->get_result()->fetch_assoc()) {
+                    $o_row = $row_o;
+                }
+                $o_stmt->close();
+            }
+        }
+        if (!$o_row && $b_row) {
+            // Try fuzzy linking by total price and user/contact
+            $u_id = (int)($b_row['user_id'] ?? 0);
+            $tot = (float)($b_row['total_amount'] ?? 0);
+            $b_time = $b_row['created_at'] ?? '';
+            $o_stmt = $conn->prepare("SELECT * FROM orders WHERE (user_id = ? OR Contact = ? OR Contact LIKE CONCAT('%', ?, '%')) AND ABS(total_price - ?) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, order_date, ?)) ASC LIMIT 1");
+            if ($o_stmt) {
+                $o_stmt->bind_param("issds", $u_id, $phone_clean, $phone_clean, $tot, $b_time);
+                $o_stmt->execute();
+                if ($row_o = $o_stmt->get_result()->fetch_assoc()) {
+                    $o_row = $row_o;
+                }
+                $o_stmt->close();
+            }
+        }
+        
+        if ($o_row) {
+            $order_data = $o_row;
+            if ($b_row) {
+                $order_data['billing_details'] = $b_row;
+                $order_data['display_order_id'] = $b_row['id'];
+            } else {
                 $u_id = (int)($order_data['user_id'] ?? 0);
                 $tot = (float)($order_data['total_price'] ?? 0);
                 $ord_time = $order_data['order_date'] ?? '';
-                $b_stmt = $conn->prepare("SELECT * FROM billing_details WHERE (user_id = ? OR mobile = ? OR alt_mobile = ?) AND ABS(total_amount - ?) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, created_at, ?)) ASC LIMIT 1");
+                $b_stmt = $conn->prepare("SELECT * FROM billing_details WHERE (user_id = ? OR mobile = ? OR alt_mobile = ? OR mobile LIKE CONCAT('%', ?, '%') OR alt_mobile LIKE CONCAT('%', ?, '%')) AND ABS(total_amount - ?) < 5 ORDER BY ABS(TIMESTAMPDIFF(SECOND, created_at, ?)) ASC LIMIT 1");
                 if ($b_stmt) {
-                    $b_stmt->bind_param("issds", $u_id, $phone, $phone, $tot, $ord_time);
+                    $b_stmt->bind_param("issssds", $u_id, $phone_clean, $phone_clean, $phone_clean, $phone_clean, $tot, $ord_time);
                     $b_stmt->execute();
-                    $b_res = $b_stmt->get_result();
-                    if ($b_row = $b_res->fetch_assoc()) {
-                        $order_data['billing_details'] = $b_row;
+                    if ($b_row_found = $b_stmt->get_result()->fetch_assoc()) {
+                        $order_data['billing_details'] = $b_row_found;
+                        $order_data['display_order_id'] = $b_row_found['id'];
                     }
                     $b_stmt->close();
                 }
-            } else {
-                $error_msg = "No order found with the provided Order ID and Phone Number.";
             }
-            $stmt->close();
+            if (empty($order_data['display_order_id'])) {
+                $order_data['display_order_id'] = $order_data['id'];
+            }
+        } elseif ($b_row) {
+            // Construct order_data directly from billing_details if orders table row missing/unlinked
+            $order_data = [
+                'id' => !empty($b_row['order_id']) ? (int)$b_row['order_id'] : (int)$b_row['id'],
+                'display_order_id' => $b_row['id'],
+                'user_id' => $b_row['user_id'],
+                'customer_name' => $b_row['fullname'],
+                'address' => $b_row['address'] . (!empty($b_row['city']) ? ', ' . $b_row['city'] : '') . (!empty($b_row['state']) ? ', ' . $b_row['state'] : '') . (!empty($b_row['pincode']) ? ' - ' . $b_row['pincode'] : ''),
+                'Contact' => !empty($b_row['mobile']) ? $b_row['mobile'] : $b_row['alt_mobile'],
+                'total_price' => $b_row['total_amount'],
+                'payment_mode' => $b_row['Mode'],
+                'order_status' => (strtoupper($b_row['payment_status'] ?? '') === 'SUCCESS') ? 1 : 0,
+                'order_date' => $b_row['created_at'],
+                'billing_details' => $b_row
+            ];
+        } else {
+            $error_msg = "No order found with the provided Order ID and Phone Number.";
         }
     } else {
         $error_msg = "Please enter both Order ID and Phone Number.";
@@ -298,7 +371,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
         <!-- Tracker UI -->
         <div class="tracking-wrapper">
             <div class="tracking-header">
-                <h3>Order #<?= $order_data['id'] ?></h3>
+                <h3>Order #<?= htmlspecialchars($order_data['display_order_id'] ?? $order_data['id']) ?></h3>
                 <p class="text-muted">Placed on <?= date('d M Y, h:i A', strtotime($order_data['order_date'])) ?></p>
             </div>
             
@@ -342,6 +415,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
         <div class="order-card">
             <div class="order-body">
                 <?php
+                $ord_id_1 = (int)$order_data['id'];
+                $ord_id_2 = (int)($order_data['billing_details']['id'] ?? $order_data['id']);
                 $items_stmt = $conn->prepare("
                     SELECT oi.*, 
                            COALESCE(NULLIF(oi.image, ''), sc.Image1, ac.Image1, p.image, bo.banner_image) AS Image1 
@@ -350,10 +425,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['track_order'])) {
                     LEFT JOIN all_category ac ON (oi.product_name COLLATE utf8mb4_general_ci = ac.name COLLATE utf8mb4_general_ci OR ac.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', ac.name COLLATE utf8mb4_general_ci, '%'))
                     LEFT JOIN products p ON (oi.product_name COLLATE utf8mb4_general_ci = p.name COLLATE utf8mb4_general_ci OR p.name COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', p.name COLLATE utf8mb4_general_ci, '%'))
                     LEFT JOIN bumper_offers bo ON (oi.product_name COLLATE utf8mb4_general_ci = bo.title COLLATE utf8mb4_general_ci OR bo.title COLLATE utf8mb4_general_ci LIKE CONCAT('%', oi.product_name COLLATE utf8mb4_general_ci, '%') OR oi.product_name COLLATE utf8mb4_general_ci LIKE CONCAT('%', bo.title COLLATE utf8mb4_general_ci, '%'))
-                    WHERE oi.order_id = ?
+                    WHERE oi.order_id IN (?, ?)
                     GROUP BY oi.id
                 ");
-                $items_stmt->bind_param("i", $order_data['id']);
+                $items_stmt->bind_param("ii", $ord_id_1, $ord_id_2);
                 $items_stmt->execute();
                 $items_result = $items_stmt->get_result();
                 
