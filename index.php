@@ -1499,9 +1499,8 @@ try {
                   if (($row['type'] ?? '') === 'admin_coll') {
                     $link = 'collections.php?collection_id=' . $id;
                   } else {
-                    // Extract the first word of the collection name (e.g., "Allen" from "Allen Solly") to filter products
-                    $first_word = strtok($name, ' ');
-                    $link = 'subshop1.php?category_id=' . $catId . '&filter=' . urlencode($first_word);
+                    // Pass full exact collection name to filter only intended products
+                    $link = 'subshop1.php?category_id=' . $catId . '&filter=' . urlencode($name);
                   }
             ?>
                   <div class="swiper-slide coll-slide-new">
