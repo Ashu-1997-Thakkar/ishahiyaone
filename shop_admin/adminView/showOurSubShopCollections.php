@@ -236,11 +236,6 @@ function isFashionCategory(?string $categoryName): bool {
                                             <i class="fas fa-trash-alt" style="font-size: 12px;"></i>
                                         </button>
                                     </div>
-                                    
-                                    <button onclick="toggleSubStatus(<?= $row['product_id'] ?>, 'best')" class="btn-action-custom full-width w-100 <?= $row['is_best'] ? 'btn-best-outline' : 'btn-best-green' ?>"><?= $row['is_best'] ? 'Unmark Best' : 'Mark as Best' ?></button>
-                                    <button onclick="toggleSubStatus(<?= $row['product_id'] ?>, 'bumper')" class="btn-action-custom full-width w-100 <?= $row['is_bumper_offer'] ? 'btn-bumper-outline' : 'btn-bumper-red' ?>"><?= $row['is_bumper_offer'] ? 'Unmark Bumper' : 'Mark as Bumper' ?></button>
-                                    <button onclick="toggleSubStatus(<?= $row['product_id'] ?>, 'arrival')" class="btn-action-custom full-width w-100 <?= $row['is_new_arrival'] ? 'btn-arrival-outline' : 'btn-arrival-yellow' ?>"><?= $row['is_new_arrival'] ? 'Unmark New Arrival' : 'Mark as New Arrival' ?></button>
-                                    <button onclick="toggleSubStatus(<?= $row['product_id'] ?>, 'collection')" class="btn-action-custom full-width w-100 <?= $row['is_our_collection'] ? 'btn-col-outline' : 'btn-col-grey' ?>"><?= $row['is_our_collection'] ? 'Unmark Our Collection' : 'Mark Our Collection' ?></button>
                                 </div>
                             </td>
                         </tr>

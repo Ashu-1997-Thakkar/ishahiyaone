@@ -24,7 +24,8 @@ $sql = "SELECT
             sc.sub_category_name,
             p.is_new_arrival,
             p.is_our_collection,
-            p.is_best
+            p.is_best,
+            p.is_bumper_offer
         FROM all_category p
         LEFT JOIN main_category mc ON p.main_category_id = mc.id
         LEFT JOIN sub_category sc ON p.sub_category_id = sc.id
@@ -95,6 +96,8 @@ $sn = $offset + 1;
     .btn-sub-cyan { background-color: #0dcaf0; color: black; border: 1px solid #0dcaf0; }
     .btn-best-green { background-color: #198754; color: white; border: 1px solid #198754; }
     .btn-best-outline { background-color: transparent; color: #198754; border: 1px solid #198754; }
+    .btn-bumper-red { background-color: #dc3545; color: white; border: 1px solid #dc3545; }
+    .btn-bumper-outline { background-color: transparent; color: #dc3545; border: 1px solid #dc3545; }
 
     /* Action Grid Layout */
     .action-grid {
@@ -175,6 +178,9 @@ $sn = $offset + 1;
                                     <?php if ($row['is_best']): ?>
                                         <span class="badge badge-success badge-feature" title="Best Seller">BEST</span>
                                     <?php endif; ?>
+                                    <?php if ($row['is_bumper_offer']): ?>
+                                        <span class="badge badge-danger badge-feature" title="Bumper Offer">BUMPER</span>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td><span class="text-muted"><?= htmlspecialchars($row['brand'] ?: '—') ?></span></td>
@@ -189,11 +195,13 @@ $sn = $offset + 1;
                                         <button onclick="deleteOurShopProduct(<?= $row['product_id'] ?>)" class="btn btn-danger rounded shadow-sm d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0;" title="Delete" data-toggle="tooltip">
                                             <i class="fas fa-trash-alt" style="font-size: 12px;"></i>
                                         </button>
+                                        <button onclick="openSubcategoryModal(<?= $row['product_id'] ?>, <?= (int)$row['main_category_id'] ?>)" class="btn btn-info rounded shadow-sm d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; padding: 0; background-color: #0dcaf0; border-color: #0dcaf0;" title="Add Sub" data-toggle="tooltip">
+                                            <i class="fas fa-sitemap" style="font-size: 12px; color: black;"></i>
+                                        </button>
                                     </div>
                                     
-                                    <button onclick="openSubcategoryModal(<?= $row['product_id'] ?>, <?= (int)$row['main_category_id'] ?>)" class="btn-action-custom btn-sub-cyan w-100">Add Sub</button>
-                                    <button onclick="toggleBestStatus(<?= $row['product_id'] ?>)" class="btn-action-custom w-100 <?= $row['is_best'] ? 'btn-best-outline' : 'btn-best-green' ?>"><?= $row['is_best'] ? 'Unmark Best' : 'Mark as Best' ?></button>
-                                    
+                                    <button onclick="toggleBestStatus(<?= $row['product_id'] ?>)" class="btn-action-custom full-width w-100 <?= $row['is_best'] ? 'btn-best-outline' : 'btn-best-green' ?>"><?= $row['is_best'] ? 'Unmark Best' : 'Mark as Best' ?></button>
+                                    <button onclick="toggleBumperStatus(<?= $row['product_id'] ?>, <?= $row['is_bumper_offer'] ? 1 : 0 ?>)" class="btn-action-custom full-width w-100 <?= $row['is_bumper_offer'] ? 'btn-bumper-outline' : 'btn-bumper-red' ?>"><?= $row['is_bumper_offer'] ? 'Unmark Bumper' : 'Mark as Bumper' ?></button>
                                     <button onclick="toggleArrivalStatus(<?= $row['product_id'] ?>)" class="btn-action-custom full-width w-100 <?= $row['is_new_arrival'] ? 'btn-arrival-outline' : 'btn-arrival-yellow' ?>"><?= $row['is_new_arrival'] ? 'Unmark New Arrival' : 'Mark as New Arrival' ?></button>
                                     <button onclick="toggleCollectionStatus(<?= $row['product_id'] ?>)" class="btn-action-custom full-width w-100 <?= $row['is_our_collection'] ? 'btn-col-outline' : 'btn-col-grey' ?>"><?= $row['is_our_collection'] ? 'Unmark Our Collection' : 'Mark Our Collection' ?></button>
                                 </div>
@@ -822,6 +830,23 @@ $sn = $offset + 1;
         $.get(`controller/mark_our_collection.php?id=${id}&type=main`, function() {
             loadModule('our-shop');
             showToast("Collection status updated", "success");
+        });
+    }
+
+    function toggleBumperStatus(id, currentStatus) {
+        let isBumper = currentStatus ? 0 : 1;
+        $.ajax({
+            url: "controller/updateBumperOfferStatus.php",
+            type: "POST",
+            data: { product_id: id, source: 'all_category', is_bumper_offer: isBumper },
+            success: function(response) {
+                if (response.trim() === 'success') {
+                    showToast("Bumper Offer status updated!", "success");
+                    loadModule('our-shop', getOurShopCurrentPage());
+                } else {
+                    showToast("Failed to update status", "danger");
+                }
+            }
         });
     }
 
