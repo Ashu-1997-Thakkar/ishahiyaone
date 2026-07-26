@@ -1641,11 +1641,11 @@ try {
 
     // Fetch the products explicitly marked as Bumper Offers from all 3 tables that are ACTIVE
     $sqlBumper = "
-        SELECT id AS product_id, id AS cat_id, CAST(name AS CHAR CHARACTER SET utf8mb4) AS name, CAST(brand AS CHAR CHARACTER SET utf8mb4) AS brand, price, CAST(Image1 AS CHAR CHARACTER SET utf8mb4) AS image, 'all_category' AS source, bumper_end_date, bumper_discount FROM all_category WHERE is_bumper_offer = 1 AND (bumper_start_date IS NULL OR bumper_end_date IS NULL OR CURDATE() BETWEEN DATE(bumper_start_date) AND DATE(bumper_end_date))
+        SELECT id AS product_id, id AS cat_id, CAST(name AS CHAR CHARACTER SET utf8mb4) AS name, CAST(brand AS CHAR CHARACTER SET utf8mb4) AS brand, price, CAST(Image1 AS CHAR CHARACTER SET utf8mb4) AS image, 'all_category' AS source, bumper_end_date, bumper_discount FROM all_category WHERE is_bumper_offer = 1 AND (bumper_end_date IS NULL OR bumper_end_date = '' OR bumper_end_date = '0000-00-00 00:00:00' OR CURDATE() <= DATE(bumper_end_date))
         UNION ALL
-        SELECT id AS product_id, id AS cat_id, CAST(name AS CHAR CHARACTER SET utf8mb4) AS name, CAST(brand AS CHAR CHARACTER SET utf8mb4) AS brand, price, CAST(Image1 AS CHAR CHARACTER SET utf8mb4) AS image, 'subcategories' AS source, bumper_end_date, bumper_discount FROM subcategories WHERE is_bumper_offer = 1 AND (bumper_start_date IS NULL OR bumper_end_date IS NULL OR CURDATE() BETWEEN DATE(bumper_start_date) AND DATE(bumper_end_date))
+        SELECT id AS product_id, id AS cat_id, CAST(name AS CHAR CHARACTER SET utf8mb4) AS name, CAST(brand AS CHAR CHARACTER SET utf8mb4) AS brand, price, CAST(Image1 AS CHAR CHARACTER SET utf8mb4) AS image, 'subcategories' AS source, bumper_end_date, bumper_discount FROM subcategories WHERE is_bumper_offer = 1 AND (bumper_end_date IS NULL OR bumper_end_date = '' OR bumper_end_date = '0000-00-00 00:00:00' OR CURDATE() <= DATE(bumper_end_date))
         UNION ALL
-        SELECT product_id, COALESCE(sub_category_id, category_id) AS cat_id, CAST(name AS CHAR CHARACTER SET utf8mb4) AS name, CAST(brand AS CHAR CHARACTER SET utf8mb4) AS brand, price, CAST(image AS CHAR CHARACTER SET utf8mb4) AS image, 'products' AS source, bumper_end_date, bumper_discount FROM products WHERE is_bumper_offer = 1 AND (bumper_start_date IS NULL OR bumper_end_date IS NULL OR CURDATE() BETWEEN DATE(bumper_start_date) AND DATE(bumper_end_date))
+        SELECT product_id, COALESCE(sub_category_id, category_id) AS cat_id, CAST(name AS CHAR CHARACTER SET utf8mb4) AS name, CAST(brand AS CHAR CHARACTER SET utf8mb4) AS brand, price, CAST(image AS CHAR CHARACTER SET utf8mb4) AS image, 'products' AS source, bumper_end_date, bumper_discount FROM products WHERE is_bumper_offer = 1 AND (bumper_end_date IS NULL OR bumper_end_date = '' OR bumper_end_date = '0000-00-00 00:00:00' OR CURDATE() <= DATE(bumper_end_date))
         ORDER BY product_id DESC LIMIT 15
     ";
     $bumperProductsRes = $conn->query($sqlBumper);
@@ -1656,21 +1656,18 @@ try {
         }
     }
   ?>
-  <!-- Bumper Offers Section (Ecommerce Light Layout) -->
-  <section id="bumper-offers" class="section-p" style="background-color: #fcfcfc; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; padding: 40px 0;">
-    <div class="container position-relative" style="z-index: 1;">
+  <!-- Bumper Offers Section -->
+  <section id="bumper-offers" class="section-p">
+    <div class="container position-relative">
       
       <div class="section-title-wrapper text-center mb-4 position-relative">
         <h2 class="section-title m-0" style="font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">
            BUMPER OFFERS
         </h2>
-        
-        <!-- Subtitle Quote -->
         <p class="text-muted mt-2 mb-0" style="font-style: italic; font-size: 1.1rem; font-weight: 500;">
             "Exclusive deals handpicked just for you — limited time only."
         </p>
         
-        <!-- View All Link (Aligned to the right on desktop, centered on mobile) -->
         <div class="mt-3 mt-md-0" style="position: absolute; right: 15px; bottom: 0px;">
             <a href="bumper-offers.php" class="text-danger font-weight-bold d-none d-md-block" style="text-decoration: underline; font-size: 0.95rem;">
                 View All Offers <i class="fas fa-arrow-right ml-1"></i>
@@ -1684,322 +1681,88 @@ try {
               View All Offers <i class="fas fa-arrow-right ml-1"></i>
           </a>
       </div>
-      <style>
-        .premium-offer-grid {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 15px;
-            padding-bottom: 15px;
-            padding-top: 5px;
-            scrollbar-width: none; /* Firefox */
-            scroll-behavior: smooth;
-        }
-        .premium-offer-grid::-webkit-scrollbar {
-            display: none; /* Chrome */
-        }
-        .premium-offer-card {
-            flex: 0 0 calc(20% - 12px); /* 5 cards per row on desktop */
-            min-width: 240px;
-            scroll-snap-align: start;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: relative;
-            text-align: center;
-            border: 1px solid #f2f2f2;
-            transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-            display: flex;
-            flex-direction: column;
-            text-decoration: none;
-            overflow: hidden;
-        }
-        .premium-offer-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        @media (max-width: 1200px) {
-            .premium-offer-card { flex: 0 0 calc(25% - 12px); } /* 4 per row */
-        }
-        @media (max-width: 992px) {
-            .premium-offer-card { flex: 0 0 calc(33.333% - 10px); } /* 3 per row */
-        }
-        @media (max-width: 768px) {
-            .premium-offer-card { flex: 0 0 calc(50% - 8px); } /* 2 per row */
-        }
-        @media (max-width: 480px) {
-            .premium-offer-card { flex: 0 0 calc(100% - 10px); min-width: 260px; } /* 1 per row */
-        }
-        .premium-offer-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-decoration: none;
-        }
-        .po-badge-hot {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 20px;
-            z-index: 3;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .po-badge-discount {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 20px;
-            z-index: 3;
-        }
-        .po-img-wrapper {
-            height: 220px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #fdfdfd;
-            position: relative;
-            overflow: hidden;
-            padding: 15px;
-        }
-        .po-img-wrapper img {
-            max-height: 100%;
-            max-width: 100%;
-            object-fit: contain;
-            transition: transform 0.4s ease;
-            z-index: 1;
-        }
-        .premium-offer-card:hover .po-img-wrapper img {
-            transform: scale(1.05);
-        }
-        .po-action-overlay {
-            position: absolute;
-            bottom: -50px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            transition: bottom 0.3s ease;
-            padding: 15px 10px;
-            background: linear-gradient(to top, rgba(0,0,0,0.05), transparent);
-            z-index: 2;
-        }
-        .premium-offer-card:hover .po-action-overlay {
-            bottom: 0;
-        }
-        .po-action-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #fff;
-            color: #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
-            font-size: 14px;
-        }
-        .po-action-btn:hover {
-            background: #111;
-            color: #c59d2f;
-            transform: scale(1.1);
-        }
-        .po-content {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            background: #fff;
-            z-index: 3;
-        }
-        .po-brand {
-            font-size: 11px;
-            color: #888;
-            margin-bottom: 6px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .po-title {
-            font-size: 14px;
-            font-weight: 800;
-            color: #111;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            height: 40px;
-            line-height: 1.4;
-            transition: color 0.2s;
-        }
-        .premium-offer-card:hover .po-title {
-            color: #c59d2f;
-        }
-        .po-stars {
-            color: #fadb14;
-            font-size: 11px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: center;
-            gap: 2px;
-        }
-        .po-price-wrapper {
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px dashed #eee;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .po-price {
-            font-size: 14px;
-            font-weight: 900;
-            color: #c59d2f;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        /* Slider Navigation Buttons */
-        .slider-nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #fff;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 10;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-size: 14px;
-            color: #555;
-        }
-        .slider-nav-btn:hover {
-            background: #f8f9fa;
-            color: #111;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-50%) scale(1.05);
-        }
-        .prev-btn { left: -15px; }
-        .next-btn { right: -15px; }
-        @media (max-width: 768px) {
-            .prev-btn { left: -5px; }
-            .next-btn { right: -5px; }
-            .slider-nav-btn { width: 34px; height: 34px; font-size: 12px; }
-        }
-      </style>
-      
-      <div class="position-relative">
-          <button class="slider-nav-btn prev-btn" onclick="document.getElementById('bumperSlider').scrollBy({ left: -260, behavior: 'smooth' })">
-              <i class="fas fa-chevron-left"></i>
-          </button>
-          
-          <div class="premium-offer-grid" id="bumperSlider">
+
+      <div class="premium-grid">
         <?php
           if (!empty($bumperProducts)) {
             foreach ($bumperProducts as $product) {
-              $title = $product['name'] ?? 'Bumper Offer';
-              $brand = $product['brand'] ?? 'IshaHiya';
-              $price = (float)($product['price'] ?? 0);
-              $actual_product_id = (int)$product['product_id'];
+              $pId = (int)$product['product_id'];
+              $pName = $product['name'] ?? 'Bumper Offer';
+              $pBrand = $product['brand'] ?? 'IshaHiya';
+              $pPrice = (float)($product['price'] ?? 0);
               
-              $img = trim($product['image']);
-              $bannerImg = 'shop_admin/uploads/no-image.png';
-              if (!empty($img)) {
-                  $imgName = basename($img);
-                  if ($product['source'] === 'products') {
-                      $bannerImg = 'shop_admin/uploads/' . $imgName;
-                  } else {
-                      $bannerImg = (strpos($img, 'shop_admin/uploads/') !== false) ? $img : 'shop_admin/uploads/subshop/' . $imgName;
-                  }
-                  
-                  if (!file_exists(__DIR__ . '/' . $bannerImg)) {
-                      $bannerImg = 'shop_admin/uploads/no-image.png';
-                  }
+              $pImgRaw = trim($product['image']);
+              $pImgName = basename($pImgRaw);
+
+              // Robust multi-path image resolution
+              $image = '';
+              if (!empty($pImgName)) {
+                $pathSub = 'shop_admin/uploads/subshop/' . $pImgName;
+                $pathMain = 'shop_admin/uploads/' . $pImgName;
+                $pathSubCat = 'image/subcategories/' . $pImgName;
+                $pathRaw = ltrim($pImgRaw, '/');
+
+                if (file_exists(__DIR__ . '/' . $pathSub)) {
+                  $image = $pathSub;
+                } elseif (file_exists(__DIR__ . '/' . $pathMain)) {
+                  $image = $pathMain;
+                } elseif (file_exists(__DIR__ . '/' . $pathSubCat)) {
+                  $image = $pathSubCat;
+                } elseif (file_exists(__DIR__ . '/' . $pathRaw)) {
+                  $image = $pathRaw;
+                } else {
+                  $image = $pImgRaw;
+                }
               }
 
-              $link = "drt.php?product_id=" . $actual_product_id . "&source=" . urlencode($product['source']);
+              if (empty($image) || (!file_exists(__DIR__ . '/' . $image) && strpos($image, 'http') === false)) {
+                $image = 'shop_admin/uploads/no-image.png';
+              }
+
               $discount = (int)$product['bumper_discount'];
-              $final_price = $discount > 0 ? round($price * (1 - $discount / 100), 2) : $price;
+              $final_price = $discount > 0 ? round($pPrice * (1 - $discount / 100), 2) : $pPrice;
+
+              $pLink = 'drt.php?product_id=' . $pId . '&source=' . urlencode($product['source'] ?? '') . '&hide_timer=1';
         ?>
-              <a href="<?= htmlspecialchars($link) ?>" class="premium-offer-card">
-                  <div class="po-badge-hot"><i class="fas fa-fire mr-1"></i> BUMPER</div>
-                  <?php if ($discount > 0): ?>
-                  <div class="po-badge-discount"><?= $discount ?>% OFF</div>
-                  <?php endif; ?>
-                  
-                  <div class="po-img-wrapper">
-                      <img src="<?= htmlspecialchars($bannerImg) ?>" alt="<?= htmlspecialchars($title) ?>" loading="lazy" style="object-fit: cover;">
-                      <div class="po-action-overlay">
-                          <span class="po-action-btn" title="Add to Wishlist" onclick="bumperAddToWishlist(event, <?= $actual_product_id ?>, '<?= htmlspecialchars($link) ?>')"><i class="far fa-heart"></i></span>
-                          <span class="po-action-btn" title="Quick View" onclick="bumperQuickView(event, <?= $actual_product_id ?>, '<?= htmlspecialchars($link) ?>')"><i class="far fa-eye"></i></span>
-                          <span class="po-action-btn" title="Add to Cart" onclick="bumperAddToCart(event, <?= $actual_product_id ?>, <?= htmlspecialchars(json_encode($title)) ?>, <?= $final_price ?>, <?= htmlspecialchars(json_encode($bannerImg)) ?>)"><i class="fas fa-shopping-bag"></i></span>
-                      </div>
-                  </div>
-                  
-                  <div class="po-content">
-                      <div class="po-brand"><?= htmlspecialchars($brand) ?></div>
-                      <h5 class="po-title"><?= htmlspecialchars($title) ?></h5>
-                      
-                      <div class="po-stars">
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                          <i class="fas fa-star"></i>
-                      </div>
-                      
-                      <div class="po-price-wrapper" style="border-bottom: 1px dashed #eee; padding-bottom: 8px; margin-bottom: 8px;">
-                          <?php if ($discount > 0): ?>
-                            <del class="text-muted mr-1" style="font-size: 13px;">₹<?= number_format($price, 2) ?></del>
-                            <span class="po-price text-danger" style="font-size: 15px; font-weight: bold;">₹<?= number_format($final_price, 2) ?></span>
-                          <?php else: ?>
-                            <span class="po-price text-danger" style="font-size: 15px;">₹<?= number_format($price, 2) ?></span>
-                          <?php endif; ?>
-                      </div>
-                      
-                      <!-- Compact Card Timer -->
-                      <div class="po-countdown" data-end-time="<?= date('Y-m-d\TH:i:s', strtotime($product['bumper_end_date'])) ?>" style="background: #fff3f3; border-radius: 4px; padding: 4px 6px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                          <span style="font-size: 10px; font-weight: 800; color: #d93025; text-transform: uppercase;">Ends In</span>
-                          <div style="display:flex; align-items:center; gap: 3px; font-size: 11px; font-weight: bold; color: #d93025;">
-                              <span class="cd-hours bg-danger text-white rounded px-1 shadow-sm">00</span>:
-                              <span class="cd-mins bg-danger text-white rounded px-1 shadow-sm">00</span>:
-                              <span class="cd-secs bg-danger text-white rounded px-1 shadow-sm">00</span>
-                          </div>
-                      </div>
-                  </div>
-              </a>
+            <div class="product-card-premium">
+              <div class="product-img-wrapper position-relative">
+                <div style="position: absolute; top: 10px; left: 10px; background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px; z-index: 3; text-transform: uppercase; letter-spacing: 0.5px;"><i class="fas fa-fire mr-1"></i> BUMPER</div>
+                <?php if ($discount > 0): ?>
+                  <div style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #11998e, #38ef7d); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; z-index: 3;"><?= $discount ?>% OFF</div>
+                <?php endif; ?>
+                
+                <img class="product-img-main" src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($pName) ?>" loading="lazy">
+                <div class="product-actions">
+                  <button class="action-btn wishlist-btn <?= in_array($pId, $wishlist_ids) ? 'active' : '' ?>" onclick="toggleWishlist(<?= $pId ?>, this)" title="Add to Wishlist">
+                    <i class="<?= in_array($pId, $wishlist_ids) ? 'fas' : 'far' ?> fa-heart"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="product-details">
+                <span class="product-brand"><?= htmlspecialchars($pBrand) ?></span>
+                <h5 class="product-title"><?= htmlspecialchars($pName) ?></h5>
+                
+                <div style="display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 12px; margin-top: 5px;">
+                    <?php if ($discount > 0): ?>
+                        <del style="color: #888; font-size: 12px; font-weight: 600;">₹<?= number_format($pPrice, 2) ?></del>
+                        <span style="color: #c59d2f; font-size: 16px; font-weight: 900;">₹<?= number_format($final_price, 2) ?></span>
+                    <?php else: ?>
+                        <span style="color: #c59d2f; font-size: 16px; font-weight: 900;">₹<?= number_format($pPrice, 2) ?></span>
+                    <?php endif; ?>
+                </div>
+                
+                <a href="<?= htmlspecialchars($pLink) ?>" class="btn-shop-now">View More</a>
+              </div>
+            </div>
         <?php
             }
           } else {
-            echo "<div class='col-12 text-center'><p class='text-muted mt-4'>No bumper products available.</p></div>";
+            echo "<div class='col-12 text-center'><p class='text-muted'>No bumper products available.</p></div>";
           }
         ?>
-          </div>
-          
-          <button class="slider-nav-btn next-btn" onclick="document.getElementById('bumperSlider').scrollBy({ left: 260, behavior: 'smooth' })">
-              <i class="fas fa-chevron-right"></i>
-          </button>
       </div>
+    </div>
+  </section>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
